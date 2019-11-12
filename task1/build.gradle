@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'focus_start_8454-kushnarev'
+group 'focusstart.8454-kushnarev'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
