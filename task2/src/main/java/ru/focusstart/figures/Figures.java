@@ -1,18 +1,18 @@
 package ru.focusstart.figures;
 
 public enum Figures {
-    CIRCLE (new CircleBorder()),
-    SQUARE (new SquareBorder()),
-    RECTANGLE (new RectangleBorder()),
+    CIRCLE(new CircleCreator()),
+    SQUARE(new SquareCreator()),
+    RECTANGLE(new RectangleCreator()),
     NONE(null);
 
-    private Border border;
+    private FigureCreator figureCreator;
 
-    public Border getBorder() throws IllegalArgumentException{
-        return border;
+    public FigureCreator getFigureCreator() throws IllegalArgumentException {
+        return figureCreator;
     }
 
-    Figures(Border border) {
-        this.border = border;
+    Figures(FigureCreator figureCreator) {
+        this.figureCreator = figureCreator;
     }
 }

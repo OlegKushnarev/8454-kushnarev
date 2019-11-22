@@ -33,65 +33,24 @@ public class Streams {
     }
 
     public void close() throws IOException {
-        try {
-            assert inStream != null;
-            inStream.close();
-        } catch (IOException e) {
-            throw e;
-        }
-
-        try {
-            assert outStream != null;
-            outStream.close();
-        } catch (IOException e) {
-            throw e;
-        }
+        inStream.close();
+        outStream.close();
     }
 
     public List<String> readToListStrings() throws IOException {
         List<String> strings = new ArrayList<>();
-        BufferedReader bufferFromFile = null;
-
-        try {
-            bufferFromFile = new BufferedReader(new InputStreamReader(this.inStream, StandardCharsets.UTF_8));
-
-            while (bufferFromFile.ready())
-            {
-                strings.add(bufferFromFile.readLine());
-            }
-        } catch (IOException e) {
-            System.out.println("Ошибка чтения файла.");
-            throw e;
-        }finally {
-            try {
-                assert bufferFromFile != null;
-                bufferFromFile.close();
-            }catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
+        BufferedReader bufferFromFile = new BufferedReader(new InputStreamReader(this.inStream, StandardCharsets.UTF_8));
+        while (bufferFromFile.ready()) {
+            strings.add(bufferFromFile.readLine());
         }
+        bufferFromFile.close();
 
         return strings;
     }
 
     public void print(Object output) throws IOException {
-        BufferedWriter bufferedWriter = null;
-
-        try {
-            bufferedWriter = new BufferedWriter(new OutputStreamWriter(this.outStream, StandardCharsets.UTF_8));
-
-            bufferedWriter.write(output.toString());
-
-        } catch (IOException e) {
-            System.out.println("Ошибка записи файла.");
-            throw e;
-        } finally {
-            try {
-                assert bufferedWriter != null;
-                bufferedWriter.close();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(this.outStream));
+        bufferedWriter.write(output.toString());
+        bufferedWriter.close();
     }
 }

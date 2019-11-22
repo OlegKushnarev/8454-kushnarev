@@ -1,7 +1,6 @@
 package ru.focusstart.figures;
 
 import java.text.DecimalFormat;
-import java.util.List;
 
 public class Circle extends Figure {
 
@@ -33,9 +32,7 @@ public class Circle extends Figure {
     @Override
     public String toString() {
         StringBuilder output = new StringBuilder(super.toString());
-
         DecimalFormat outputFormat = new DecimalFormat("##.##");
-
         output.append("Радиус: ").append(outputFormat.format(this.radius)).append("\n");
         output.append("Диаметр: ").append(outputFormat.format(this.getDiameter())).append("\n");
 

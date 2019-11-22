@@ -11,10 +11,6 @@ public abstract class Figure {
         this.title = title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -29,13 +25,10 @@ public abstract class Figure {
 
     public String getOutput() {
         StringBuilder output = new StringBuilder();
-
         DecimalFormat outputFormat = new DecimalFormat("##.##");
-
         output.append("Тип фигуры: ").append(this.title).append("\n");
         output.append("Площадь: ").append(outputFormat.format(this.area)).append("\n");
         output.append("Периметр: ").append(outputFormat.format(this.perimeter)).append("\n");
-
         return output.toString();
     }
 
@@ -45,6 +38,7 @@ public abstract class Figure {
     }
 
     public abstract double calculateArea();
+
     public abstract double calculatePerimetr();
 
     public void calculateFigure() {

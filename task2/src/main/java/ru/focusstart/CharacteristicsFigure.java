@@ -1,5 +1,8 @@
-package ru.focusstart.figures;
+package ru.focusstart;
 
+import ru.focusstart.figures.Figure;
+import ru.focusstart.figures.FigureCreator;
+import ru.focusstart.figures.Figures;
 import ru.focusstart.streams.Streams;
 
 import java.io.*;
@@ -12,30 +15,34 @@ public class CharacteristicsFigure {
         System.out.println("Для расчёта фигуры введите имя входного файла (обязательный параметр),");
         System.out.println("имя выходного файла (необязательный параметр)");
 
+        if (!checkParameters(Arrays.asList(args))) {
+            return;
+        }
+
         Streams streams = null;
         try {
-            if (!CharacteristicsFigure.checkParameters(Arrays.asList(args))) {
+            streams = new Streams(args);
+            List<String> figureOptions = streams.readToListStrings();
+            if (figureOptions.isEmpty()) {
+                System.out.println("Ошибка! Файл пуст.");
                 return;
             }
 
-            streams = new Streams(args);
-
-            List<String> figureOptions = streams.readToListStrings();
-
-            Border border = Figures.valueOf(figureOptions.get(0)).getBorder();
-            Figure figure = border.getFigure(figureOptions);
+            FigureCreator figureCreator = Figures.valueOf(figureOptions.get(0)).getFigureCreator();
+            Figure figure = figureCreator.getFigure(figureOptions);
             figure.calculateFigure();
 
             streams.print(figure);
-            streams.close();
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("Ошибка! Файл пуст.");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Ошибка! В файле указана неизвестная фигура.");
-        } catch (FileNotFoundException e) {
+        } catch (IllegalArgumentException | IOException e) {
             System.out.println(e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
+        } finally {
+            try {
+                if (streams != null) {
+                    streams.close();
+                }
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
@@ -44,12 +51,10 @@ public class CharacteristicsFigure {
             System.out.println("Ошибка! Не указано имя входного файла.");
             return false;
         }
-
         if (list.size() > 2) {
             System.out.println("Ошибка! Указаны неизвестные параметры");
             return false;
         }
-
         return true;
     }
 }
