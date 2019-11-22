@@ -1,4 +1,3 @@
 rootProject.name = '8454-kushnarev'
 include 'task1'
 include 'task2'
-
