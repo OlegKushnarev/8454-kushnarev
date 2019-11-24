@@ -1,4 +1,4 @@
-package ru.focusstart.pakage1;
+package ru.focusstart.production;
 
 public class Product {
     private static int count = 0;
