@@ -5,17 +5,25 @@ import ru.focusstart.view.MainWindow;
 import ru.focusstart.view.Window;
 
 import java.awt.*;
+import java.util.Map;
 
 public interface WindowCreater {
-    Window createWindow();
+    Window createWindow(Map<String, String> options);
 }
 
 class MainWindowCreater implements WindowCreater {
 
     @Override
-    public MainWindow createWindow() {
-      //  Toolkit toolkit = Toolkit.getDefaultToolkit();
-      //  Dimension screenSize = toolkit.getScreenSize();
+    public MainWindow createWindow(Map<String, String> options) {
+        if (options.isEmpty()) {
+            throw new IllegalArgumentException("Карта настроек пуста!");
+        }
+
+        String nickName = options.get("Nickname");
+        if (nickName.isEmpty()) {
+            throw new IllegalArgumentException("Никнейм не задан!");
+        }
+
         return new MainWindow(800, 500);
     }
 }
@@ -23,9 +31,12 @@ class MainWindowCreater implements WindowCreater {
 class ConnectWindowCreater implements WindowCreater {
 
     @Override
-    public ConnectWindow createWindow() {
-        //Toolkit toolkit = Toolkit.getDefaultToolkit();
-       /// Dimension screenSize = toolkit.getScreenSize();
-        return new ConnectWindow(300, 150);
+    public ConnectWindow createWindow(Map<String, String> options) {
+        if (options.isEmpty()) {
+            return new ConnectWindow(300, 150);
+        }
+        else {
+            return new ConnectWindow(300, 150);
+        }
     }
 }

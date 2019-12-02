@@ -19,6 +19,7 @@ public class MainWindow extends Window {
         JTextArea contactArea = new JTextArea(20, 15);
         //contactArea.setLineWrap(true);
         ///contactArea.setWrapStyleWord(true);
+        contactArea.setEditable(false);
         this.add(new JScrollPane(contactArea), BorderLayout.EAST);
 
         JTextArea messageArea = new JTextArea(5, 15/*width - 50, height - 5*/);
@@ -26,8 +27,6 @@ public class MainWindow extends Window {
         messageArea.setWrapStyleWord(true);
         this.add(new JScrollPane(messageArea), BorderLayout.SOUTH);
         this.revalidate();
-
-
 
         JMenu jMenu = new JMenu("File");
         JMenuItem exitItem = new JMenuItem("Exit");
