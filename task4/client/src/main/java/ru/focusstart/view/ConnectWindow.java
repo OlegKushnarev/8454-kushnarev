@@ -1,6 +1,5 @@
 package ru.focusstart.view;
 
-import ru.focusstart.controller.Cheсk;
 import ru.focusstart.model.WindowCreater;
 import ru.focusstart.model.Windows;
 
@@ -8,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConnectWindow extends Window implements ActionListener {
     private JTextField serverAddressField;
@@ -18,10 +19,8 @@ public class ConnectWindow extends Window implements ActionListener {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         JLabel serverAddressLabel = new JLabel("Адрес сервера :");
-        /*JTextField */
         serverAddressField = new JTextField(15);
         JLabel loginLabel = new JLabel("Ваш логин :");
-        /*JTextField */
         login = new JTextField(15);
 
         JPanel jPanel = new JPanel();
@@ -35,13 +34,18 @@ public class ConnectWindow extends Window implements ActionListener {
         JButton enterButton = new JButton("Войти в чат");
         enterButton.addActionListener(this);
 
-
         buttonPane.add(enterButton);
         this.add(jPanel, BorderLayout.CENTER);
         this.add(buttonPane, BorderLayout.SOUTH);
 
         this.setResizable(false);
         this.setVisible(true);
+    }
+
+    public ConnectWindow(int width, int height, String defaultServerAddress, String defaultNickName) {
+        this(width, height);
+        serverAddressField.setText(defaultServerAddress);
+        login.setText(defaultNickName);
     }
 
     @Override
@@ -57,10 +61,14 @@ public class ConnectWindow extends Window implements ActionListener {
                 throw new IllegalArgumentException("Не введён ник!");
             }
 
+            this.dispose();
+
             WindowCreater windowCreater = Windows.MAIN.getWindowCreater();
-            Window connectWindow = windowCreater.createWindow();
+            List<String> nickNames = new ArrayList<>();
+            nickNames.add(nickName);
+            Window connectWindow = windowCreater.createWindow(nickNames);
             connectWindow.setVisible(true);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(new JFrame(),
                     e.getMessage(),
                     "Ошибка подключения",
