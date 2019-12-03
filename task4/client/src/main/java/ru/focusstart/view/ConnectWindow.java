@@ -1,5 +1,6 @@
 package ru.focusstart.view;
 
+import ru.focusstart.model.Buttons;
 import ru.focusstart.model.WindowCreater;
 import ru.focusstart.model.Windows;
 
@@ -7,39 +8,40 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConnectWindow extends Window implements ActionListener {
+public class ConnectWindow extends Window {
     private JTextField serverAddressField;
     private JTextField login;
 
     public ConnectWindow(int width, int height) {
-        super("Подключение", width, height);
+        //super("Подключение", width, height);
+        super(new String("Подключение".getBytes(), StandardCharsets.UTF_8), width, height);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        JLabel serverAddressLabel = new JLabel("Адрес сервера :");
+        JLabel serverAddressLabel = new JLabel(new String("Адрес сервера :".getBytes(), StandardCharsets.UTF_8));
         serverAddressField = new JTextField(15);
-        JLabel loginLabel = new JLabel("Ваш логин :");
+        JLabel loginLabel = new JLabel(new String("Ваш логин :".getBytes(), StandardCharsets.UTF_8));
         login = new JTextField(15);
 
         JPanel jPanel = new JPanel();
-
         jPanel.add(serverAddressLabel);
         jPanel.add(serverAddressField);
         jPanel.add(loginLabel);
         jPanel.add(login);
 
         JPanel buttonPane = new JPanel();
-        JButton enterButton = new JButton("Войти в чат");
-        enterButton.addActionListener(this);
-
+        JButton enterButton = Buttons.ENTER.getButtonCreater().getButton();
         buttonPane.add(enterButton);
+
         this.add(jPanel, BorderLayout.CENTER);
         this.add(buttonPane, BorderLayout.SOUTH);
-
-        this.setResizable(false);
-        this.setVisible(true);
+       // this.setResizable(false);
+       // this.pack();
+        //this.setVisible(true);
     }
 
     public ConnectWindow(int width, int height, String defaultServerAddress, String defaultNickName) {
@@ -48,36 +50,11 @@ public class ConnectWindow extends Window implements ActionListener {
         login.setText(defaultNickName);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent actionEvent) {
-        try {
-            String serverAddress = serverAddressField.getText();
-            if (serverAddress.isEmpty()) {
-                throw new IllegalArgumentException("Не введён адрес сервера!");
-            }
-
-            String nickName = login.getText();
-            if (nickName.isEmpty()) {
-                throw new IllegalArgumentException("Не введён ник!");
-            }
-
-            this.dispose();
-
-            WindowCreater windowCreater = Windows.MAIN.getWindowCreater();
-            List<String> nickNames = new ArrayList<>();
-            nickNames.add(nickName);
-            Window connectWindow = windowCreater.createWindow(nickNames);
-            connectWindow.setVisible(true);
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(new JFrame(),
-                    e.getMessage(),
-                    "Ошибка подключения",
-                    JOptionPane.ERROR_MESSAGE);
-        }
+    public JTextField getServerAddressField() {
+        return serverAddressField;
     }
 
-    @Override
-    public boolean chek(String checkString) {
-        return false;
+    public JTextField getLogin() {
+        return login;
     }
 }

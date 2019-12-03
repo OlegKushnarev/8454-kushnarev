@@ -2,7 +2,7 @@ package ru.focusstart.model;
 
 public enum Windows {
     MAIN(new MainWindowCreater()),
-   CONNECT(new ConnectWindowCreater()),
+    CONNECT(new ConnectWindowCreater()),
     NONE(null);
 
     private WindowCreater windowCreater;

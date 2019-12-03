@@ -1,22 +1,26 @@
 package ru.focusstart.view;
 
+import ru.focusstart.model.Buttons;
 import ru.focusstart.model.TextAreas;
 import ru.focusstart.model.WindowCreater;
 import ru.focusstart.model.Windows;
 
 import javax.swing.*;
 import java.awt.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainWindow extends Window {
+    private  JTextArea chatArea;
+    private JTextArea messageArea;
 
     public MainWindow(int width, int height, List<String> nickNames) {
-        super("Чат", width, height);
+        //super("Чат", width, height);
+        super(new String("Чат".getBytes(), StandardCharsets.UTF_8), width, height);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setResizable(false);
 
-        JTextArea chatArea = TextAreas.CHATAREA.getTextAreaCreater().getJTextArea();
+        chatArea = TextAreas.CHATAREA.getTextAreaCreater().getJTextArea();
         this.add(new JScrollPane(chatArea), BorderLayout.WEST);
 
         JTextArea contactArea = TextAreas.CONTACTAREA.getTextAreaCreater().getJTextArea();
@@ -26,26 +30,16 @@ public class MainWindow extends Window {
         }
         this.add(new JScrollPane(contactArea), BorderLayout.EAST);
 
-        JTextArea messageArea = TextAreas.MESSAGEAREA.getTextAreaCreater().getJTextArea();
+        messageArea = TextAreas.MESSAGEAREA.getTextAreaCreater().getJTextArea();
         JPanel jPanel = new JPanel();
         jPanel.add(new JScrollPane(messageArea));
 
-        JButton sendButton = new JButton("Отправить");
-        sendButton.setPreferredSize(new Dimension(110, 75));
-        sendButton.addActionListener(e -> {
-            String message = messageArea.getText();
-            if (!message.isEmpty()) {
-                messageArea.setText(null);
-                chatArea.setText(message);
-            }
-        });
+        JButton sendButton = Buttons.SEND.getButtonCreater().getButton();
         jPanel.add(sendButton);
 
         this.add(jPanel, BorderLayout.SOUTH);
-        //this.revalidate();
 
-        JMenu jMenu = new JMenu("Файл");
-        JMenuItem logOut = new JMenuItem("Выйти из чата");
+        JMenuItem logOut = new JMenuItem(new String("Выйти из чата".getBytes(), StandardCharsets.UTF_8));
         logOut.addActionListener(e -> {
             this.dispose();
             List<String> enterOptions = new ArrayList<>();
@@ -55,19 +49,23 @@ public class MainWindow extends Window {
             Window connectWindow = windowCreater.createWindow(enterOptions);
             connectWindow.setVisible(true);
         });
-        jMenu.add(logOut);
-        JMenuItem exitItem = new JMenuItem("Закрыть");
-        exitItem.addActionListener(e -> System.exit(0));
-        jMenu.add(exitItem);
 
+        JMenuItem exitItem = new JMenuItem(new String("Закрыть".getBytes(), StandardCharsets.UTF_8));
+        exitItem.addActionListener(e -> System.exit(0));
+
+        JMenu jMenu = new JMenu(new String("Файл".getBytes(), StandardCharsets.UTF_8));
+        jMenu.add(logOut);
+        jMenu.add(exitItem);
         JMenuBar jMenuBar = new JMenuBar();
         jMenuBar.add(jMenu);
-
         this.setJMenuBar(jMenuBar);
     }
 
-    @Override
-    public boolean chek(String checkString) {
-        return false;
+    public JTextArea getChatArea() {
+        return chatArea;
+    }
+
+    public JTextArea getMessageArea() {
+        return messageArea;
     }
 }
