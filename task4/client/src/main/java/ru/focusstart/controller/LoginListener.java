@@ -1,15 +1,12 @@
 package ru.focusstart.controller;
 
-import ru.focusstart.model.WindowCreater;
-import ru.focusstart.model.Windows;
+import ru.focusstart.model.ChatModel;
 import ru.focusstart.view.ConnectWindow;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LoginListener implements ActionListener {
 
@@ -38,13 +35,10 @@ public class LoginListener implements ActionListener {
                 throw new IllegalArgumentException("Не введён ник!");
             }
 
-         /*   connectWindow.dispose();
-
-            WindowCreater windowCreater = Windows.MAIN.getWindowCreater();
-            List<String> nickNames = new ArrayList<>();
-            nickNames.add(nickName);
-            Window maintWindow = windowCreater.createWindow(nickNames);
-            maintWindow.setVisible(true);*/
+            ChatModel chatClient = ChatModel.getInstance();
+            chatClient.setServerAddress(serverAddress);
+            chatClient.setUserNickname(nickName);
+            //connectWindow.dispose();
         } catch (IllegalArgumentException ex) {
             JOptionPane.showMessageDialog(new JFrame(),
                     ex.getMessage(),

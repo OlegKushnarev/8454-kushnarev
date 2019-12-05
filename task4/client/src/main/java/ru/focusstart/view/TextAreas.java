@@ -1,4 +1,8 @@
-package ru.focusstart.model;
+package ru.focusstart.view;
+
+import ru.focusstart.view.ChatAreaCreater;
+import ru.focusstart.view.ContactAreaCreater;
+import ru.focusstart.view.MessageAreaCreater;
 
 public enum TextAreas {
     CHATAREA(new ChatAreaCreater()),

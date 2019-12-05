@@ -1,7 +1,6 @@
-package ru.focusstart.model;
+package ru.focusstart.view;
 
 import ru.focusstart.controller.LoginListener;
-import ru.focusstart.view.MainWindow;
 
 import javax.swing.*;
 import java.awt.*;

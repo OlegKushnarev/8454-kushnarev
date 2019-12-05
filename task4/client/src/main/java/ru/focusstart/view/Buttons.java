@@ -1,4 +1,4 @@
-package ru.focusstart.model;
+package ru.focusstart.view;
 
 public enum Buttons {
     ENTER(new EnterButtonCreater()),

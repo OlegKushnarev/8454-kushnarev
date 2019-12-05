@@ -1,17 +1,8 @@
 package ru.focusstart.view;
 
-import ru.focusstart.model.Buttons;
-import ru.focusstart.model.WindowCreater;
-import ru.focusstart.model.Windows;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ConnectWindow extends Window {
     private JTextField serverAddressField;

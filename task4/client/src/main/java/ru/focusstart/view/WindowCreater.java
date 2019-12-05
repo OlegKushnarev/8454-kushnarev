@@ -1,8 +1,5 @@
-package ru.focusstart.model;
+package ru.focusstart.view;
 
-import ru.focusstart.view.ConnectWindow;
-import ru.focusstart.view.MainWindow;
-import ru.focusstart.view.Window;
 import java.util.List;
 
 public interface WindowCreater {

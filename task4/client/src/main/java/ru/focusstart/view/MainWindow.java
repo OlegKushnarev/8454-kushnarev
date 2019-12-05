@@ -1,10 +1,5 @@
 package ru.focusstart.view;
 
-import ru.focusstart.model.Buttons;
-import ru.focusstart.model.TextAreas;
-import ru.focusstart.model.WindowCreater;
-import ru.focusstart.model.Windows;
-
 import javax.swing.*;
 import java.awt.*;
 import java.nio.charset.StandardCharsets;
