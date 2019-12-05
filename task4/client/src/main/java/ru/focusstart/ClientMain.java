@@ -7,7 +7,7 @@ import ru.focusstart.model.ChatModel;
 import javax.swing.*;
 import java.io.IOException;
 
-public class Main {
+public class ClientMain {
     public static void main(String[] args) {
         ChatModel chatClient = ChatModel.getInstance();
         chatClient.addObserver(new Facade1());

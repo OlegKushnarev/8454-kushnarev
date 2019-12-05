@@ -16,7 +16,7 @@ public class Facade1 implements Observer {
     public void update(Observable observable, Object o) {
         if (connectWindow == null) {
             List<String> enterOptions = new ArrayList<>();
-            enterOptions.add("server.ru");
+            enterOptions.add("localhost");
             enterOptions.add("Oleg");
             WindowCreater windowCreater = Windows.CONNECT.getWindowCreater();
             /*Window */connectWindow = windowCreater.createWindow(enterOptions);
