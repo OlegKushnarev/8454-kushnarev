@@ -1,6 +1,7 @@
 package ru.focusstart.view;
 
 import ru.focusstart.controller.LoginListener;
+import ru.focusstart.controller.SendListner;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,15 +27,17 @@ class SendButtonCreater implements ButtonCreater {
     public JButton getButton() {
         JButton sendButton = new JButton(new String("Отправить".getBytes(), StandardCharsets.UTF_8));
         sendButton.setPreferredSize(new Dimension(110, 75));
-        sendButton.addActionListener(e -> {
+        sendButton.addActionListener(new SendListner());
+ /*       sendButton.addActionListener(e -> {
             MainWindow mainFrame = (MainWindow) sendButton.getTopLevelAncestor();
             JTextArea messageArea = mainFrame.getMessageArea();
             String message = messageArea.getText();
             if (!message.isEmpty()) {
                 messageArea.setText(null);
-                mainFrame.getChatArea().setText(message);
+
+                //mainFrame.getChatArea().append(message);
             }
-        });
+        });*/
         return sendButton;
     }
 }

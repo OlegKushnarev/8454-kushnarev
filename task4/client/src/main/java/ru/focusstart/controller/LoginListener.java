@@ -1,5 +1,6 @@
 package ru.focusstart.controller;
 
+import ru.focusstart.login.Login;
 import ru.focusstart.model.ChatModel;
 import ru.focusstart.view.ConnectWindow;
 
@@ -26,9 +27,16 @@ public class LoginListener implements ActionListener {
             ConnectWindow connectWindow = (ConnectWindow) parentComp;
             JTextField serverAddressField = connectWindow.getServerAddressField();
             String serverAddress = serverAddressField.getText();
-            if (serverAddress.isEmpty()) {
+            String[] serverAddressParts = serverAddress.split(":");
+            if (serverAddressParts.length == 0) {
                 throw new IllegalArgumentException("Не введён адрес сервера!");
             }
+            if (serverAddressParts.length < 2) {
+                throw new IllegalArgumentException("Не введён порт для подключения к серверу!");
+            }
+ /*           if (serverAddress.isEmpty()) {
+                throw new IllegalArgumentException("Не введён адрес сервера!");
+            }*/
             JTextField login = connectWindow.getLogin();
             String nickName = login.getText();
             if (nickName.isEmpty()) {
@@ -36,8 +44,9 @@ public class LoginListener implements ActionListener {
             }
 
             ChatModel chatClient = ChatModel.getInstance();
-            chatClient.setServerAddress(serverAddress);
-            chatClient.setUserNickname(nickName);
+            chatClient.setLogin(new Login(serverAddressParts[0], Integer.parseInt(serverAddressParts[1]), nickName));
+           // chatClient.setServerAddress(serverAddress);
+            //chatClient.setUserNickname(nickName);
             //connectWindow.dispose();
         } catch (IllegalArgumentException ex) {
             JOptionPane.showMessageDialog(new JFrame(),

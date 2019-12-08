@@ -10,12 +10,12 @@ import java.io.IOException;
 public class ClientMain {
     public static void main(String[] args) {
         ChatModel chatClient = ChatModel.getInstance();
-        chatClient.addObserver(new Facade1());
+        Facade1 facade1 = new Facade1();
+        //chatClient.addObserver(facade1);
         chatClient.enterToChat();
 
         while (!chatClient.isConnect()) {
-            while (chatClient.getServerAddress().isEmpty() &&
-                    chatClient.getUserNickname().isEmpty()) {
+            while (chatClient.getLogin() == null) {
               //  System.out.println("Пока не нажал кнопку");
                 try {
                     Thread.sleep(1000);
@@ -25,7 +25,7 @@ public class ClientMain {
             }
             // System.out.println("Прошли цикл!!!");
             try {
-                chatClient.addObserver(new Facade2());
+                //chatClient.addObserver(new Facade2());
                 chatClient.connectToServer();
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(new JFrame(),
@@ -33,9 +33,12 @@ public class ClientMain {
                         "Ошибка подключения",
                         JOptionPane.ERROR_MESSAGE);
             }finally {
-                chatClient.setServerAddress("");
-                chatClient.setUserNickname("");
+                chatClient.setLogin(null);
             }
         }
+       // System.out.println("Вышли из цикла");
+        chatClient.listenToUser();
+        //chatClient.deleteObserver(facade1);
+        chatClient.listenToServer();
     }
 }

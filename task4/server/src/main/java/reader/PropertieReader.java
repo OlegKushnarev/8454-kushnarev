@@ -10,7 +10,7 @@ public class PropertieReader {
 
     public PropertieReader(Class clazz, String fullFileName) {
         this.clazz = clazz;
-        this.fullFileName = this.fullFileName;
+        this.fullFileName = fullFileName;
     }
 
     public int read(String nameProperty) throws IOException {

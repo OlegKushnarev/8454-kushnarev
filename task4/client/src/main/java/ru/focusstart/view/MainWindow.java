@@ -9,6 +9,7 @@ import java.util.List;
 public class MainWindow extends Window {
     private  JTextArea chatArea;
     private JTextArea messageArea;
+    private JTextArea contactArea;
 
     public MainWindow(int width, int height, List<String> nickNames) {
         //super("Чат", width, height);
@@ -18,7 +19,7 @@ public class MainWindow extends Window {
         chatArea = TextAreas.CHATAREA.getTextAreaCreater().getJTextArea();
         this.add(new JScrollPane(chatArea), BorderLayout.WEST);
 
-        JTextArea contactArea = TextAreas.CONTACTAREA.getTextAreaCreater().getJTextArea();
+        contactArea = TextAreas.CONTACTAREA.getTextAreaCreater().getJTextArea();
         for (String nickName :
                 nickNames) {
             contactArea.setText(nickName);
@@ -62,5 +63,9 @@ public class MainWindow extends Window {
 
     public JTextArea getMessageArea() {
         return messageArea;
+    }
+
+    public JTextArea getContactArea() {
+        return contactArea;
     }
 }
