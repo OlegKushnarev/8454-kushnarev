@@ -29,8 +29,8 @@ public class SendListner implements ActionListener {
         Message message = new Message(messageArea.getText());
         //if (message != null) {
             messageArea.setText(null);
-            ChatModel chatClient = ChatModel.getInstance();
-            chatClient.setMessageFromUser(message);
+            //ChatModel chatClient = ChatModel.getInstance();
+            //chatClient.setMessageFromUser(message);
             //System.out.println("SendListner " + message);
        // }
     }

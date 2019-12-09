@@ -1,13 +1,21 @@
 package ru.focusstart.serialization;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.focusstart.contactlist.ContactList;
-import ru.focusstart.encryption.Encryption;
-import ru.focusstart.login.Login;
-import ru.focusstart.message.Message;
+import ru.focusstart.jsonobject.JSONObject;
+import ru.focusstart.jsonobject.JSONObjects;
 
 public class JSONDeserialization {
+    public JSONObject deserialize(String serializedString) {
+        JSONObject jsonObject;
+        for (JSONObjects object :
+                JSONObjects.values()) {
+            jsonObject = object.getJSONObjectCreater().getObjectFromJSON(serializedString);
+            if (jsonObject != null) {
+                return jsonObject;
+            }
+        }
+        return null;
+    }
+}
 /*
     public String serializeObject(Message message) {
         String serializedMessage;
@@ -29,7 +37,7 @@ public class JSONDeserialization {
         }
 
         return serializedLogin;
-    }*/
+    }
 
     public Message deserializeMessage(String serializedMessage) {
         Message deserializedMessage;
@@ -69,4 +77,4 @@ public class JSONDeserialization {
         }
         return deserializedContactList;
     }
-}
+}*/

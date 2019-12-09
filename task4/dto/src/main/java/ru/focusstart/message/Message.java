@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.focusstart.encryption.Encryption;
+import ru.focusstart.jsonobject.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @JsonAutoDetect
-public class Message implements Encryption {
+public class Message implements Encryption, JSONObject {
     private String text;
     private Date date;
 
@@ -60,6 +61,11 @@ public class Message implements Encryption {
         }
 
         return serializedMessage;
+    }
+
+    @Override
+    public void show() {
+
     }
 /*
     @Override

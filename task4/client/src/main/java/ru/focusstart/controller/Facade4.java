@@ -7,18 +7,17 @@ import ru.focusstart.view.WindowCreater;
 import ru.focusstart.view.Windows;
 
 public class Facade4 implements InvalidationListener {
+    private static Window mainWindow;
 
     @Override
     public void invalidated(Observable observable) {
-      /*  if (observable instanceof ChatModel) {
+        if (mainWindow == null) {
             WindowCreater windowCreater = Windows.MAIN.getWindowCreater();
-            ChatModel chatClient = ChatModel.getInstance();
-            Window mainWindow = windowCreater.createWindow(chatClient.getNickNames());
+            mainWindow = windowCreater.createWindow();
             mainWindow.setVisible(true);
-        }*/
-
-        WindowCreater windowCreater = Windows.MAIN.getWindowCreater();
-        Window mainWindow = windowCreater.createWindow();
-        mainWindow.setVisible(true);
+        } else {
+            mainWindow.dispose();
+            mainWindow = null;
+        }
     }
 }

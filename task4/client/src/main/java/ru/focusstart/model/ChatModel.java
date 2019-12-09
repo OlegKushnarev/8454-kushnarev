@@ -5,37 +5,29 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableBooleanValue;
 import ru.focusstart.contactlist.ContactList;
 import ru.focusstart.controller.Facade3;
+import ru.focusstart.controller.Facade4;
 import ru.focusstart.encryption.Encryption;
+import ru.focusstart.jsonobject.JSONObject;
 import ru.focusstart.login.Login;
 import ru.focusstart.message.Message;
 import ru.focusstart.model.booleanproperties.BooleanProperties;
 import ru.focusstart.serialization.JSONDeserialization;
 
-import javax.swing.*;
-
-public class ChatModel/* extends Observable */{
+public class ChatModel/* extends Observable */ {
     private static ChatModel instance;
     private SimpleBooleanProperty OnEnter;
     private SimpleBooleanProperty isConnect;
-    Encryption encryptionObject;
-   // private Login login;
-    private SimpleObjectProperty<Message> messageFromServer;
-    private Message messageFromUser;
+    JSONObject jsonObject;
+    // private Login login;
+    // private SimpleObjectProperty<Message> messageFromServer;
+    // private Message messageFromUser;
     //private SimpleListProperty<String> nickNames;
-    private ContactList nicknames;
+    //private ContactList nicknames;
     BufferedReader reader;
     PrintWriter writer;
 
@@ -50,12 +42,13 @@ public class ChatModel/* extends Observable */{
         super();
         this.OnEnter = BooleanProperties.ON_ENTER.getBooleanPropertiesCreater().getBooleanProperty();
         this.isConnect = BooleanProperties.IS_CONNECT.getBooleanPropertiesCreater().getBooleanProperty();
+        this.jsonObject = null;
         //this.serverAddress = "";
         //this.userNickname = "";
         //nicknames = new ContactList();
         //this.messageFromServer = "";
         //this.messageFromUser = null;
-        this.nicknames = new ContactList();
+        //this.nicknames = new ContactList();
 
     }
 /*
@@ -82,15 +75,15 @@ public class ChatModel/* extends Observable */{
     public Login getLogin() {
         return login;
     }
-*/
+*//*
     public Message getMessageFromServer() {
         return messageFromServer;
-    }
-
+    }*/
+/*
     public Message getMessageFromUser() {
         return messageFromUser;
     }
-
+*/
     /*public void setServerAddress(String serverAddress) {
         this.serverAddress = serverAddress;
     }*/
@@ -98,34 +91,41 @@ public class ChatModel/* extends Observable */{
     public void setLogin(Login login) {
         this.login = login;
     }
-*/
+*//*
     public void setMessageFromUser(Message messageFromUser) {
         this.messageFromUser = messageFromUser;
-    }
+    }*/
 
-    public boolean enterToChat() {
+    public void enterToChat() {
         this.OnEnter.set(true);
-
-        while (!this.isConnect.getValue()) {
+     /*   while (!this.isConnect.get()) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.getMessage();
             }
-        }
+        }*/
 
-        return this.isConnect.get();
+        //return this.isConnect.get();
+    }
+
+    public void exitFromChat() {
+        this.isConnect.addListener(new Facade4());
+        this.isConnect.set(false);
+        this.OnEnter.addListener(new Facade3());
+        this.OnEnter.set(true);
     }
 
     public void connectToServer(Login login) throws IOException {
-        Socket socket = new Socket(login.getServerAddress(), login.getPortNumber());
+     /*   Socket socket = new Socket(login.getServerAddress(), login.getPortNumber());
         reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        writer = new PrintWriter(socket.getOutputStream());
+        writer = new PrintWriter(socket.getOutputStream());*/
       /*  JSONSerialization jsonSerialization = new JSONSerialization();
         writer.println(jsonSerialization.serializeObject(this.login));
         writer.flush();*/
-        this.sendToServer(login);
-        String message = "";
+  /*      this.sendEncryptionToServer(login);
+        this.listenToServer();*/
+   /*     String message = "";
         while (message.isEmpty()) {
             if (reader.ready()) {
                 message = reader.readLine();
@@ -139,16 +139,21 @@ public class ChatModel/* extends Observable */{
             }
         }
         JSONDeserialization deserializationContactList = new JSONDeserialization();
-        nicknames = deserializationContactList.deserializeContactList(message);
-        if (nicknames == null) {
-            this.messageFromServer = deserializationContactList.deserializeMessage(message);
-        }
+        JSONObject jsonObject = deserializationContactList.deserialize(message);*/
+        /*JSONObject*/
+ /*       while (jsonObject == null) {
+            jsonObject = this.getJSONObjectFromServer();
+            if (jsonObject == null) {
+                System.out.println("Сервер прислал лажу");
+            }
+        }*/
 
         this.isConnect.set(true);
+        this.OnEnter.addListener(new Facade3());
         this.OnEnter.set(false);
     }
 
-    public void sendToServer(Encryption encryptionObject) {
+    public void sendEncryptionToServer(Encryption encryptionObject) {
         //System.out.println("ChatModel " + this.messageFromUser);
         //JSONSerialization jsonSerialization = new JSONSerialization();
         //String str = jsonSerialization.serializeObject(this.messageFromUser);
@@ -158,15 +163,36 @@ public class ChatModel/* extends Observable */{
         writer.flush();
     }
 
+    public JSONObject getJSONObjectFromServer() {
+        String message = "";
+        while (message.isEmpty()) {
+            try {
+                if (reader.ready()) {
+                    message = reader.readLine();
+                    //break;
+                }
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        JSONDeserialization deserializationContactList = new JSONDeserialization();
+        return deserializationContactList.deserialize(message);
+    }
+
     public void listenToUser() {
-        Thread ListenerThread = new Thread(() -> {
+        Thread ListenerUserThread = new Thread(() -> {
             boolean interrupted = false;
             while (!interrupted) {
-                if (this.messageFromUser != null) {
-                    this.sendToServer(this.messageFromUser);
+              /*  if (this.messageFromUser != null) {
+                    this.sendEncryptionToServer(this.messageFromUser);
                     this.messageFromUser = null;
-                }
-
+                }*/
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -174,20 +200,20 @@ public class ChatModel/* extends Observable */{
                 }
             }
         });
-        ListenerThread.start();
+        ListenerUserThread.start();
     }
 
     public void listenToServer() {
-        while (true) {
-            try {
-                String message = reader.readLine();
-
-                // System.out.println("Получили сообщение от сервера");
-               // setChanged();
-              //  notifyObservers();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
+        Thread ListenerServerThread = new Thread(() -> {
+            //boolean interrupted = false;
+            while (true) {
+                jsonObject = this.getJSONObjectFromServer();
+                if (jsonObject == null) {
+                    System.out.println("Сервер прислал лажу");
+                }
+                jsonObject.show();
             }
-        }
+        });
+        ListenerServerThread.start();
     }
 }

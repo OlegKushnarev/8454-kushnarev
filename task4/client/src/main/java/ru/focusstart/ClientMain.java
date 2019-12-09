@@ -10,10 +10,11 @@ import java.io.IOException;
 public class ClientMain {
     public static void main(String[] args) {
         ChatModel chatClient = ChatModel.getInstance();
-        if (chatClient.enterToChat()) {
+        chatClient.enterToChat();
+      /*  if (chatClient.enterToChat()) {
             chatClient.listenToUser();
-            chatClient.listenToServer();
-        }
+            //chatClient.listenToServer();
+        }*/
 /*
         while (!chatClient.isConnect()) {
             while (chatClient.getLogin() == null) {

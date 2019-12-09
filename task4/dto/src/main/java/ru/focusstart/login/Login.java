@@ -3,11 +3,12 @@ package ru.focusstart.login;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.focusstart.encryption.Encryption;
+import ru.focusstart.jsonobject.JSONObject;
 import ru.focusstart.reader.PropertieReader;
 
 import java.io.IOException;
 
-public class Login implements Encryption {
+public class Login implements Encryption, JSONObject {
     private String serverAddress;
     private String userNickname;
     private int portNumber;
@@ -52,6 +53,11 @@ public class Login implements Encryption {
         }
 
         return serializedLogin;
+    }
+
+    @Override
+    public void show() {
+
     }
 /*
     @Override

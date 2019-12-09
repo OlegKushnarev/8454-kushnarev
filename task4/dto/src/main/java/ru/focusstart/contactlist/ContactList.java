@@ -3,10 +3,11 @@ package ru.focusstart.contactlist;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.beans.property.SimpleListProperty;
-import ru.focusstart.controller.ContactListner;
+//import ru.focusstart.controller.ContactListner;
 import ru.focusstart.encryption.Encryption;
+import ru.focusstart.jsonobject.JSONObject;
 
-public class ContactList extends SimpleListProperty<String> implements Encryption {
+public class ContactList extends SimpleListProperty<String> implements Encryption, JSONObject {
  /*   private List<String> nickNames;
 
     public ContactList() {
@@ -26,7 +27,7 @@ public class ContactList extends SimpleListProperty<String> implements Encryptio
 
     public ContactList() {
         super();
-        this.addListener(new ContactListner());
+       // this.addListener(new ContactListner());
     }
 
     @Override
@@ -39,5 +40,10 @@ public class ContactList extends SimpleListProperty<String> implements Encryptio
         }
 
         return serializedLogin;
+    }
+
+    @Override
+    public void show() {
+
     }
 }

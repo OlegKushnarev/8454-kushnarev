@@ -1,5 +1,7 @@
 package ru.focusstart.view;
 
+import ru.focusstart.controller.LogoutListener;
+
 import javax.swing.*;
 import java.awt.*;
 import java.nio.charset.StandardCharsets;
@@ -36,15 +38,13 @@ public class MainWindow extends Window {
         this.add(jPanel, BorderLayout.SOUTH);
 
         JMenuItem logOut = new JMenuItem(new String("Выйти из чата".getBytes(), StandardCharsets.UTF_8));
-        logOut.addActionListener(e -> {
+        logOut.addActionListener( new LogoutListener()
+          /*      e -> {
             this.dispose();
-         /*   List<String> enterOptions = new ArrayList<>();
-            enterOptions.add("server.ru");
-            enterOptions.add("Oleg");*/
             WindowCreater windowCreater = Windows.CONNECT.getWindowCreater();
             Window connectWindow = windowCreater.createWindow();
             connectWindow.setVisible(true);
-        });
+        }*/);
 
         JMenuItem exitItem = new JMenuItem(new String("Закрыть".getBytes(), StandardCharsets.UTF_8));
         exitItem.addActionListener(e -> System.exit(0));

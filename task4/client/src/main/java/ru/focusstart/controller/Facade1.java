@@ -15,11 +15,11 @@ public class Facade1 implements Observer {
     @Override
     public void update(Observable observable, Object o) {
         if (connectWindow == null) {
-            List<String> enterOptions = new ArrayList<>();
+            /*List<String> enterOptions = new ArrayList<>();
             enterOptions.add("localhost:1111");
-            enterOptions.add("Oleg");
+            enterOptions.add("Oleg");*/
             WindowCreater windowCreater = Windows.CONNECT.getWindowCreater();
-            /*Window */connectWindow = windowCreater.createWindow(enterOptions);
+            /*Window */connectWindow = windowCreater.createWindow();
             connectWindow.setVisible(true);
         }
         else {
