@@ -2,7 +2,7 @@ package ru.focusstart.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reader.PropertieReader;
+import ru.focusstart.reader.PropertieReader;
 import ru.focusstart.contactlist.ContactList;
 import ru.focusstart.encryption.Encryption;
 import ru.focusstart.login.Login;
@@ -46,7 +46,7 @@ public class ServerModel {
 
     private ServerModel() throws IOException {
         PropertieReader portNumberReader = new PropertieReader(ServerModel.class, "/server.properties");
-        this.portNumber = portNumberReader.read("server.port");
+        this.portNumber = Integer.parseInt(portNumberReader.read("server.port"));
         clients = new ArrayList<>();
         readers = new ArrayList<>();
         writers = new ArrayList<>();

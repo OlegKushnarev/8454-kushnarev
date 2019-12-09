@@ -1,4 +1,4 @@
-package reader;
+package ru.focusstart.reader;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,12 +13,12 @@ public class PropertieReader {
         this.fullFileName = fullFileName;
     }
 
-    public int read(String nameProperty) throws IOException {
+    public String read(String nameProperty) throws IOException {
         Properties properties = new Properties();
-        InputStream propertiesStream = this.clazz.getResourceAsStream("/server.properties");
+        InputStream propertiesStream = this.clazz.getResourceAsStream(fullFileName);
         if (propertiesStream != null) {
             properties.load(propertiesStream);
         }
-        return Integer.parseInt(properties.getProperty(nameProperty));
+        return properties.getProperty(nameProperty);
     }
 }

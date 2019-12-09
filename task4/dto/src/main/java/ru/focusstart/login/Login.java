@@ -3,6 +3,9 @@ package ru.focusstart.login;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.focusstart.encryption.Encryption;
+import ru.focusstart.reader.PropertieReader;
+
+import java.io.IOException;
 
 public class Login implements Encryption {
     private String serverAddress;
@@ -18,6 +21,14 @@ public class Login implements Encryption {
         this.portNumber = portNumber;
         this.userNickname = userNickname;
     }
+/*
+    public Login(String fullFileName) throws IOException {
+
+
+        this(loginReader.read("server.address"),
+                Integer.parseInt(loginReader.read("server.port")),
+                loginReader.read("nickname"));
+    }*/
 
     public String getServerAddress() {
         return serverAddress;

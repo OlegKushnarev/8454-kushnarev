@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class LoginListener implements ActionListener {
 
@@ -34,9 +35,6 @@ public class LoginListener implements ActionListener {
             if (serverAddressParts.length < 2) {
                 throw new IllegalArgumentException("Не введён порт для подключения к серверу!");
             }
- /*           if (serverAddress.isEmpty()) {
-                throw new IllegalArgumentException("Не введён адрес сервера!");
-            }*/
             JTextField login = connectWindow.getLogin();
             String nickName = login.getText();
             if (nickName.isEmpty()) {
@@ -44,13 +42,11 @@ public class LoginListener implements ActionListener {
             }
 
             ChatModel chatClient = ChatModel.getInstance();
-            chatClient.setLogin(new Login(serverAddressParts[0], Integer.parseInt(serverAddressParts[1]), nickName));
-           // chatClient.setServerAddress(serverAddress);
-            //chatClient.setUserNickname(nickName);
-            //connectWindow.dispose();
-        } catch (IllegalArgumentException ex) {
+           // chatClient.setLogin(new Login(serverAddressParts[0], Integer.parseInt(serverAddressParts[1]), nickName));
+            chatClient.connectToServer(new Login(serverAddressParts[0], Integer.parseInt(serverAddressParts[1]), nickName));
+        } catch (IllegalArgumentException | IOException e) {
             JOptionPane.showMessageDialog(new JFrame(),
-                    ex.getMessage(),
+                    e.getMessage(),
                     "Ошибка подключения",
                     JOptionPane.ERROR_MESSAGE);
         }

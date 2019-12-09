@@ -11,7 +11,7 @@ public class MainWindow extends Window {
     private JTextArea messageArea;
     private JTextArea contactArea;
 
-    public MainWindow(int width, int height, List<String> nickNames) {
+    public MainWindow(int width, int height/*, List<String> nickNames*/) {
         //super("Чат", width, height);
         super(new String("Чат".getBytes(), StandardCharsets.UTF_8), width, height);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -20,10 +20,10 @@ public class MainWindow extends Window {
         this.add(new JScrollPane(chatArea), BorderLayout.WEST);
 
         contactArea = TextAreas.CONTACTAREA.getTextAreaCreater().getJTextArea();
-        for (String nickName :
+     /*   for (String nickName :
                 nickNames) {
             contactArea.setText(nickName);
-        }
+        }*/
         this.add(new JScrollPane(contactArea), BorderLayout.EAST);
 
         messageArea = TextAreas.MESSAGEAREA.getTextAreaCreater().getJTextArea();
@@ -38,11 +38,11 @@ public class MainWindow extends Window {
         JMenuItem logOut = new JMenuItem(new String("Выйти из чата".getBytes(), StandardCharsets.UTF_8));
         logOut.addActionListener(e -> {
             this.dispose();
-            List<String> enterOptions = new ArrayList<>();
+         /*   List<String> enterOptions = new ArrayList<>();
             enterOptions.add("server.ru");
-            enterOptions.add("Oleg");
+            enterOptions.add("Oleg");*/
             WindowCreater windowCreater = Windows.CONNECT.getWindowCreater();
-            Window connectWindow = windowCreater.createWindow(enterOptions);
+            Window connectWindow = windowCreater.createWindow();
             connectWindow.setVisible(true);
         });
 

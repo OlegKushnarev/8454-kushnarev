@@ -10,10 +10,11 @@ import java.io.IOException;
 public class ClientMain {
     public static void main(String[] args) {
         ChatModel chatClient = ChatModel.getInstance();
-        Facade1 facade1 = new Facade1();
-        //chatClient.addObserver(facade1);
-        chatClient.enterToChat();
-
+        if (chatClient.enterToChat()) {
+            chatClient.listenToUser();
+            chatClient.listenToServer();
+        }
+/*
         while (!chatClient.isConnect()) {
             while (chatClient.getLogin() == null) {
               //  System.out.println("Пока не нажал кнопку");
@@ -35,10 +36,10 @@ public class ClientMain {
             }finally {
                 chatClient.setLogin(null);
             }
-        }
+        }*/
        // System.out.println("Вышли из цикла");
-        chatClient.listenToUser();
+
         //chatClient.deleteObserver(facade1);
-        chatClient.listenToServer();
+
     }
 }

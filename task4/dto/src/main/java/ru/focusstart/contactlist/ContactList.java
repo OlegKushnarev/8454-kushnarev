@@ -2,12 +2,11 @@ package ru.focusstart.contactlist;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.beans.property.SimpleListProperty;
+import ru.focusstart.controller.ContactListner;
 import ru.focusstart.encryption.Encryption;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ContactList extends ArrayList<String> implements Encryption {
+public class ContactList extends SimpleListProperty<String> implements Encryption {
  /*   private List<String> nickNames;
 
     public ContactList() {
@@ -24,6 +23,11 @@ public class ContactList extends ArrayList<String> implements Encryption {
     public boolean contains(String nickname) {
         return nickNames.contains(nickname);
     }*/
+
+    public ContactList() {
+        super();
+        this.addListener(new ContactListner());
+    }
 
     @Override
     public String serialize() {
