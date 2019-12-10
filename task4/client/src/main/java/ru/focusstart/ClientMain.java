@@ -11,6 +11,7 @@ public class ClientMain {
     public static void main(String[] args) {
         ChatModel chatClient = ChatModel.getInstance();
         chatClient.enterToChat();
+        chatClient.closeConnectionOnExit();
       /*  if (chatClient.enterToChat()) {
             chatClient.listenToUser();
             //chatClient.listenToServer();

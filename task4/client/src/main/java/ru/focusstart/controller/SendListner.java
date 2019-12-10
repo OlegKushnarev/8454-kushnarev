@@ -24,14 +24,12 @@ public class SendListner implements ActionListener {
         }
 
         MainWindow mainWindow = (MainWindow) parentComp;
-
         JTextArea messageArea = mainWindow.getMessageArea();
         Message message = new Message(messageArea.getText());
-        //if (message != null) {
-            messageArea.setText(null);
-            //ChatModel chatClient = ChatModel.getInstance();
-            //chatClient.setMessageFromUser(message);
-            //System.out.println("SendListner " + message);
-       // }
+        if (!message.getText().isEmpty()) {
+            ChatModel chatClient = ChatModel.getInstance();
+            chatClient.sendEncryptionToServer(message);
+       }
+        messageArea.setText("");
     }
 }

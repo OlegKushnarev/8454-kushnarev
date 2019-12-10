@@ -1,21 +1,29 @@
 package ru.focusstart.view;
 
+import ru.focusstart.controller.CloseListener;
 import ru.focusstart.controller.LogoutListener;
+import ru.focusstart.model.ChatModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainWindow extends Window {
-    private  JTextArea chatArea;
+   private static MainWindow currentInstance;
+    private JTextArea chatArea;
     private JTextArea messageArea;
     private JTextArea contactArea;
 
-    public MainWindow(int width, int height/*, List<String> nickNames*/) {
+    public static MainWindow getInstance() {
+        return currentInstance;
+    }
+
+    public static void setInstance(MainWindow instance) {
+        currentInstance = instance;
+    }
+
+    public MainWindow(int width, int height) {
         //super("Чат", width, height);
-        super(new String("Чат".getBytes(), StandardCharsets.UTF_8), width, height);
+        super("Chat", width, height);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         chatArea = TextAreas.CHATAREA.getTextAreaCreater().getJTextArea();
@@ -37,19 +45,12 @@ public class MainWindow extends Window {
 
         this.add(jPanel, BorderLayout.SOUTH);
 
-        JMenuItem logOut = new JMenuItem(new String("Выйти из чата".getBytes(), StandardCharsets.UTF_8));
-        logOut.addActionListener( new LogoutListener()
-          /*      e -> {
-            this.dispose();
-            WindowCreater windowCreater = Windows.CONNECT.getWindowCreater();
-            Window connectWindow = windowCreater.createWindow();
-            connectWindow.setVisible(true);
-        }*/);
+        JMenuItem logOut = new JMenuItem("Log out");
+        logOut.addActionListener(new LogoutListener());
+        JMenuItem exitItem = new JMenuItem("Close");
+        exitItem.addActionListener(new CloseListener());
 
-        JMenuItem exitItem = new JMenuItem(new String("Закрыть".getBytes(), StandardCharsets.UTF_8));
-        exitItem.addActionListener(e -> System.exit(0));
-
-        JMenu jMenu = new JMenu(new String("Файл".getBytes(), StandardCharsets.UTF_8));
+        JMenu jMenu = new JMenu("File");
         jMenu.add(logOut);
         jMenu.add(exitItem);
         JMenuBar jMenuBar = new JMenuBar();

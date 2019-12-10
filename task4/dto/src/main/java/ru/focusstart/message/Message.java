@@ -5,12 +5,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.focusstart.encryption.Encryption;
 import ru.focusstart.jsonobject.JSONObject;
+import ru.focusstart.model.ChatModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @JsonAutoDetect
 public class Message implements Encryption, JSONObject {
+   // KindsMessage kindMessage;
     private String text;
     private Date date;
 
@@ -18,7 +20,8 @@ public class Message implements Encryption, JSONObject {
         super();
     }
 
-    public Message(String text) {
+    public Message(/*KindsMessage kindMessage, */String text) {
+       // this.kindMessage = kindMessage;
         this.text = text;
         this.date = new Date();
     }
@@ -64,8 +67,8 @@ public class Message implements Encryption, JSONObject {
     }
 
     @Override
-    public void show() {
-
+    public void show(ChatModel chatModel) {
+        chatModel.show(this.toString());
     }
 /*
     @Override
