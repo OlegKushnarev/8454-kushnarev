@@ -13,6 +13,7 @@ import ru.focusstart.contactlist.ContactList;
 import ru.focusstart.controller.Facade3;
 import ru.focusstart.controller.Facade4;
 import ru.focusstart.controller.Facade5;
+import ru.focusstart.controller.Facade6;
 import ru.focusstart.encryption.Encryption;
 import ru.focusstart.jsonobject.JSONObject;
 import ru.focusstart.login.Login;
@@ -25,11 +26,12 @@ public class ChatModel {
     private Socket socket;
     private SimpleBooleanProperty OnEnter;
     private SimpleBooleanProperty isConnect;
-    private SimpleStringProperty message;
+    //private SimpleStringProperty message;
+    //private SimpleStringProperty serviceMessage;
     //private SimpleBooleanProperty haveMessage;
     //private JSONObject jsonObject;
     // private Login login;
-    //private SimpleObjectProperty<Message> messageFromServer;
+    private SimpleObjectProperty<JSONObject> jsonObjectSimpleObject;
     // private Message messageFromUser;
     //private SimpleListProperty<String> nickNames;
     //private ContactList nicknames;
@@ -47,8 +49,13 @@ public class ChatModel {
         super();
         this.OnEnter = BooleanProperties.ON_ENTER.getBooleanPropertiesCreater().getBooleanProperty();
         this.isConnect = BooleanProperties.IS_CONNECT.getBooleanPropertiesCreater().getBooleanProperty();
-        this.message = new SimpleStringProperty("");
+        this.jsonObjectSimpleObject = new SimpleObjectProperty<>();
+        this.jsonObjectSimpleObject.addListener(new Facade5());
+        this.jsonObjectSimpleObject.addListener(new Facade6());
+       /* this.message = new SimpleStringProperty("");
         this.message.addListener(new Facade5());
+        this.serviceMessage = new SimpleStringProperty("");
+        this.serviceMessage.addListener();*/
         //this.haveMessage = BooleanProperties.HAVE_MESSAGE.getBooleanPropertiesCreater().getBooleanProperty();
         //messageFromServer = new SimpleObjectProperty<>(new Message(""));
         //messageFromServer.addListener(new );
@@ -250,14 +257,14 @@ public class ChatModel {
                 if (jsonObject == null) {
                     System.out.println("Сервер прислал лажу");
                 } else {
-                    jsonObject.show(this);
+                    this.jsonObjectSimpleObject.set(jsonObject);
                 }
             }
         });
         ListenerServerThread.start();
     }
 
-    public void show(String message) {
-        this.message.set(message);
+    public void showServiceMessage(String serviceMessage) {
+
     }
 }

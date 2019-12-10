@@ -67,9 +67,10 @@ public class Message implements Encryption, JSONObject {
     }
 
     @Override
-    public void show(ChatModel chatModel) {
-        chatModel.show(this.toString());
+    public String getJSONViewerName() {
+        return "MESSAGE_VIEWER";
     }
+
 /*
     @Override
     public Encryption deserialize(String serializedObject) {

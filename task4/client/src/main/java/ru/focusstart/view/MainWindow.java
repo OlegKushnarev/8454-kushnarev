@@ -8,16 +8,16 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainWindow extends Window {
-   private static MainWindow currentInstance;
+   private static Window currentInstance;
     private JTextArea chatArea;
     private JTextArea messageArea;
     private JTextArea contactArea;
 
-    public static MainWindow getInstance() {
+    public static Window getInstance() {
         return currentInstance;
     }
 
-    public static void setInstance(MainWindow instance) {
+    public static void setInstance(Window instance) {
         currentInstance = instance;
     }
 

@@ -19,7 +19,7 @@ public class Facade4 implements ChangeListener<Boolean> {
             mainWindow.setVisible(true);
         } else {
             mainWindow.dispose();
-            MainWindow.setInstance();
+            MainWindow.setInstance(null);
             mainWindow = null;
         }
     }

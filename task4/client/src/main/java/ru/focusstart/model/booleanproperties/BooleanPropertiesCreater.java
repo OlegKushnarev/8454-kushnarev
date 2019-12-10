@@ -34,7 +34,7 @@ class HaveMessageBooleanPropertiesCreater implements BooleanPropertiesCreater {
     @Override
     public SimpleBooleanProperty getBooleanProperty() {
         SimpleBooleanProperty simpleBooleanProperty = new SimpleBooleanProperty(false);
-        simpleBooleanProperty.addListener(new Facade5());
+       // simpleBooleanProperty.addListener(new Facade5());
         return simpleBooleanProperty;
     }
 }

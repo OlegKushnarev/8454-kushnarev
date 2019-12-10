@@ -7,7 +7,9 @@ import javafx.beans.property.SimpleListProperty;
 import ru.focusstart.encryption.Encryption;
 import ru.focusstart.jsonobject.JSONObject;
 
-public class ContactList extends SimpleListProperty<String> implements Encryption, JSONObject {
+import java.util.ArrayList;
+
+public class ContactList extends ArrayList<String> implements Encryption, JSONObject {
  /*   private List<String> nickNames;
 
     public ContactList() {
@@ -43,7 +45,7 @@ public class ContactList extends SimpleListProperty<String> implements Encryptio
     }
 
     @Override
-    public void show() {
-
+    public String getJSONViewerName() {
+        return "CONTACT_LIST_VIEWER";
     }
 }
