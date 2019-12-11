@@ -45,7 +45,7 @@ public class ContactList extends ArrayList<String> implements Encryption, JSONOb
     }
 
     @Override
-    public String getJSONViewerName() {
-        return "CONTACT_LIST_VIEWER";
+    public String getOwnName() {
+        return "CONTACT_LIST";
     }
 }

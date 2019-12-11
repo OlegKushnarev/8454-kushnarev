@@ -67,8 +67,8 @@ public class Message implements Encryption, JSONObject {
     }
 
     @Override
-    public String getJSONViewerName() {
-        return "MESSAGE_VIEWER";
+    public String getOwnName() {
+        return "MESSAGE";
     }
 
 /*

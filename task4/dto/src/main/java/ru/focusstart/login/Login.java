@@ -56,8 +56,8 @@ public class Login implements Encryption, JSONObject {
     }
 
     @Override
-    public void show() {
-
+    public String getOwnName() {
+        return "LOGIN";
     }
 /*
     @Override

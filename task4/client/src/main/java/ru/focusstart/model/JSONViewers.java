@@ -1,9 +1,10 @@
 package ru.focusstart.model;
 
 public enum JSONViewers {
-    MESSAGE_VIEWER(new MessageViewer()),
-    SERVICE_MESSAGE_VIEWER(new ServiceMessageViewer()),
-    CONTACT_LIST_VIEWER(new ContactListMessageViewer()),
+    MESSAGE(new MessageViewer()),
+    SERVICE_MESSAGE(new ServiceMessageViewer()),
+    CONTACT_LIST(new ContactListMessageViewer()),
+    LOGIN(null),
     NONE(null);
 
     private JSONViewer jsonViewer;

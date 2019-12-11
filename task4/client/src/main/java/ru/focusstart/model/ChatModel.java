@@ -227,8 +227,8 @@ public class ChatModel {
                 System.out.println(e.getMessage());
             }
         }
-        JSONDeserialization deserializationContactList = new JSONDeserialization();
-        return deserializationContactList.deserialize(message);
+        JSONDeserialization deserialization = new JSONDeserialization();
+        return deserialization.deserialize(message);
     }
 /*
     public void listenToUser() {
