@@ -28,7 +28,7 @@ public class SendListner implements ActionListener {
         Message message = new Message(messageArea.getText());
         if (!message.getText().isEmpty()) {
             ChatModel chatClient = ChatModel.getInstance();
-            chatClient.sendEncryptionToServer(message);
+            chatClient.sendToServer(message);
        }
         messageArea.setText("");
     }

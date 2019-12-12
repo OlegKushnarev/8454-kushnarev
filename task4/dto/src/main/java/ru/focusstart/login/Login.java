@@ -2,16 +2,13 @@ package ru.focusstart.login;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.focusstart.encryption.Encryption;
 import ru.focusstart.jsonobject.JSONObject;
-import ru.focusstart.reader.PropertieReader;
 
-import java.io.IOException;
-
-public class Login implements Encryption, JSONObject {
+public class Login implements JSONObject {
     private String serverAddress;
     private String userNickname;
     private int portNumber;
+    private final String ownName = "LOGIN";
 
     public Login() {
         super();
@@ -47,7 +44,7 @@ public class Login implements Encryption, JSONObject {
     public String serialize() {
         String serializedLogin;
         try {
-            serializedLogin =  new ObjectMapper().writeValueAsString(this);
+            serializedLogin = new ObjectMapper().writeValueAsString(this);
         } catch (JsonProcessingException e) {
             serializedLogin = "Сообщение не отправленно! Ошибка сериализации";
         }
@@ -57,7 +54,7 @@ public class Login implements Encryption, JSONObject {
 
     @Override
     public String getOwnName() {
-        return "LOGIN";
+        return this.ownName;
     }
 /*
     @Override

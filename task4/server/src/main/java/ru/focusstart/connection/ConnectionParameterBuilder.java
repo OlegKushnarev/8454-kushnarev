@@ -44,7 +44,6 @@ public class ConnectionParameterBuilder {
         connectionParameter.setReader(reader);
         connectionParameter.setWriter(writer);
         connectionParameter.setNickname(nickname);
-        //connectionParameter.setJsonObject(jsonObject);
         return connectionParameter;
     }
 }

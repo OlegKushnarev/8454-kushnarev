@@ -1,17 +1,12 @@
 package ru.focusstart;
 
-import ru.focusstart.controller.Facade1;
-import ru.focusstart.controller.Facade2;
 import ru.focusstart.model.ChatModel;
-
-import javax.swing.*;
-import java.io.IOException;
 
 public class ClientMain {
     public static void main(String[] args) {
         ChatModel chatClient = ChatModel.getInstance();
-        chatClient.enterToChat();
-        chatClient.closeConnectionOnExit();
+        chatClient.login();
+        chatClient.waitExit();
       /*  if (chatClient.enterToChat()) {
             chatClient.listenToUser();
             //chatClient.listenToServer();

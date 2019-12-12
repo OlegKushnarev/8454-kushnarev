@@ -3,8 +3,8 @@ package ru.focusstart.jsonobject;
 public enum JSONObjects {
     MESSAGE(new MessageJSONObjectCreater()),
     LOGIN(new LoginJSONObjectCreater()),
-    CONTACTLIST(new ContactListJSONObjectCreater()),
-    NONE(null);
+    CONTACT_LIST(new ContactListJSONObjectCreater());
+    //NONE(null);
 
     private JSONObjectCreater JSONObjectCreater;
 

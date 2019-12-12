@@ -42,7 +42,6 @@ public class LoginListener implements ActionListener {
             }
 
             ChatModel chatClient = ChatModel.getInstance();
-           // chatClient.setLogin(new Login(serverAddressParts[0], Integer.parseInt(serverAddressParts[1]), nickName));
             chatClient.connectToServer(new Login(serverAddressParts[0], Integer.parseInt(serverAddressParts[1]), nickName));
         } catch (IllegalArgumentException | IOException e) {
             JOptionPane.showMessageDialog(new JFrame(),

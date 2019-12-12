@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.focusstart.connection.ConnectionParameter;
 import ru.focusstart.connection.ConnectionParameterBuilder;
+import ru.focusstart.contactlist.ContactList;
 import ru.focusstart.jsonobject.JSONObject;
 import ru.focusstart.reader.PropertieReader;
 import ru.focusstart.encryption.Encryption;
@@ -15,6 +16,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ServerModel {
@@ -47,48 +49,46 @@ public class ServerModel {
     private ServerModel() throws IOException {
         PropertieReader portNumberReader = new PropertieReader(ServerModel.class, "/server.properties");
         this.portNumber = Integer.parseInt(portNumberReader.read("server.port"));
+        this.connections = new ArrayList<>();
         //clients = new ArrayList<>();
         //readers = new ArrayList<>();
         //writers = new ArrayList<>();
         //nickNames = new ContactList();
-        concoleReader = new BufferedReader(new InputStreamReader(System.in));
-        inWork = false;
+        this.concoleReader = new BufferedReader(new InputStreamReader(System.in));
+        this.inWork = false;
     }
 
     public void addConnection(ConnectionParameter connection) {
-        connections.add(connection);
+        this.connections.add(connection);
+    }
+
+    public void removeConnection(ConnectionParameter connection) {
+        this.connections.remove(connection);
     }
 
     private void listenToConcole() {
         Thread commandListenerThread = new Thread(() -> {
-            while (inWork) {
+            while (this.inWork) {
                 try {
                     String command;
-                    // if (this.concoleReader.ready()) {
-                    command = this.concoleReader.readLine();
-                    if (command.equals("server stop")) {
-                        this.serverSocket.close();
-                        log.info(serverSocket.toString());
-                        if (!connections.isEmpty()) {
-                            for (ConnectionParameter connection :
-                                    connections) {
-                                if (connection.getSocket().isConnected()) {
-                                    connection.close();
-                                    log.info(connection.toString());
+                    if (this.concoleReader.ready()) {
+                        command = this.concoleReader.readLine();
+                        if (command.equals("server stop")) {
+                            this.serverSocket.close();
+                            log.info(serverSocket.toString());
+                            if (!connections.isEmpty()) {
+                                for (ConnectionParameter connection :
+                                        connections) {
+                                    if (connection.getSocket().isConnected()) {
+                                        connection.close();
+                                        log.info(connection.toString());
+                                    }
                                 }
                             }
-                            /*
-                            for (Socket socket : clients) {
-                                if (socket.isConnected()) {
-                                    socket.close();
-                                    log.info(socket.toString());
-                                }
-                            }*/
+                            this.inWork = false;
+                            //break;
                         }
-                        this.inWork = false;
-                        break;
                     }
-                    // }
                 } catch (IOException e) {
                     log.info(e.getMessage());
                 }
@@ -99,51 +99,28 @@ public class ServerModel {
 
     private void listenToClients() {
         Thread messageListenerThread = new Thread(() -> {
-            boolean interrupted = false;
-            while (!interrupted) {
-                //while (true) {
-                for (ConnectionParameter connection :
-                        connections) {
-                    try {
-                        this.handleConnectionParameter(connection);
-                    } catch (IOException e) {
-                        log.info(e.getMessage());
-                        System.out.println(e.getMessage());
-                    }
-
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        interrupted = true;
-                    }
-                }
-
-               /* JSONObject jsonObject = this.getJSONObjectFromClient(this.getMessageFromEveryone());
-                if (jsonObject != null) {
-                    this.ggg(jsonObject);
-                }*/
-               /*  try {
-
-                   String message = readMessage();
-                    if (!message.isEmpty()) {
-                        // System.out.println(message);
-                        JSONDeserialization deserializationMessage = new JSONDeserialization();
-                        JSONObject jsonObject = deserializationMessage.deserialize(message);
-                        // Message message = new ObjectMapper().readValue(message, Message.class);
-                        if (jsonObject != null) {
-                            this.sendMessageToEveryone(message);
+            //boolean interrupted = false;
+            while (this.inWork) {
+                // System.out.println("слушаю клиентов");
+                if (!connections.isEmpty()) {
+                    for (ConnectionParameter connection :
+                            connections) {
+                        try {
+                            this.handleConnectionParameter(connection);
+                        } catch (IOException e) {
+                            log.info(e.getMessage());
+                            System.out.println(e.getMessage());
                         }
                     }
-                } catch (IOException e) {
-                    log.info(e.getMessage());
-                    //System.out.println("Ошибка в сереализации");
-                }*/
-/*
+                }
                 try {
+                    //System.out.println("Засыпаю");
                     Thread.sleep(100);
+                    // System.out.println("Проснулся");
                 } catch (InterruptedException e) {
-                    interrupted = true;
-                }*/
+                    System.out.println(e.getMessage());
+                    //interrupted = true;
+                }
             }
         });
         messageListenerThread.start();
@@ -179,6 +156,7 @@ public class ServerModel {
 
     private String readMessage(BufferedReader reader) throws IOException {
         if (reader.ready()) {
+            System.out.println("Пытаемся читать");
             return reader.readLine();
         }
         return "";
@@ -196,15 +174,15 @@ public class ServerModel {
         return "";
     }*/
 
-    public void sendMessage(PrintWriter writer, Encryption encryptionObject) {
-        writer.println(encryptionObject.serialize());
+    public void sendMessage(PrintWriter writer, JSONObject jsonObject) {
+        writer.println(jsonObject.serialize());
         writer.flush();
     }
 
-    public void sendMessageToEveryone(Encryption encryptionObject) {
+    public void sendMessageToEveryone(JSONObject jsonObject) {
         for (ConnectionParameter connection :
                 connections) {
-            sendMessage(connection.getWriter(), encryptionObject);
+            sendMessage(connection.getWriter(), jsonObject);
         }
         /*
         for (PrintWriter writer : writers) {
@@ -229,13 +207,19 @@ public class ServerModel {
         connectionHandler.handle(connectionParameter);
     }*/
 
-    public void handleConnectionParameter(ConnectionParameter connectionParameter) throws IOException {
-        JSONObject jsonObject = this.getJSONObject(this.readMessage(connectionParameter.getReader()));
-        if (jsonObject != null) {
-            connectionParameter.setJsonObject(jsonObject);
-            ConnectionHandler connectionHandler = ConnectionHandlers.valueOf(jsonObject.getOwnName()).getConnectionHandler();
-            connectionHandler.handle(connectionParameter);
-            //this.process(connectionParameter);
+    public synchronized void handleConnectionParameter(ConnectionParameter connectionParameter) throws IOException {
+        String str = this.readMessage(connectionParameter.getReader());
+        if (!str.isEmpty()) {
+            System.out.println(str);
+            JSONObject jsonObject = this.getJSONObject(str);
+            if (jsonObject != null) {
+                System.out.println("Сообщение принято");
+                connectionParameter.setJsonObject(jsonObject);
+                ConnectionHandler connectionHandler = ConnectionHandlers.valueOf(jsonObject.getOwnName()).getConnectionHandler();
+                System.out.println(connectionHandler.getClass().getSimpleName());
+                connectionHandler.handle(connectionParameter);
+                //this.process(connectionParameter);
+            }
         }
     }
 /*
@@ -251,28 +235,61 @@ public class ServerModel {
         this.handleConnectionParameter(ConnectionParameter connectionParameter);// this.readMessage(connectionParameter.getReader()));
     }*/
 
+    public ContactList getContactList() {
+        ContactList contactList = new ContactList();
+        for (ConnectionParameter connection :
+                connections) {
+            contactList.add(connection.getNickname());
+        }
+        return contactList;
+    }
+
+    public void waitConnection() {
+        Thread WaitConnectionThread = new Thread(() -> {
+            while (inWork) {
+                Socket clientSocket;
+                try {
+                    clientSocket = serverSocket.accept();
+                    System.out.println("Попытка подключения");
+                    //BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                    //PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
+                    ConnectionParameter connectionParameter = new ConnectionParameterBuilder()
+                            .buildSocket(clientSocket)
+                            .buildReader(new BufferedReader(new InputStreamReader(clientSocket.getInputStream())))
+                            .buildWriter(new PrintWriter(clientSocket.getOutputStream())).build();
+                    this.handleConnectionParameter(connectionParameter);
+                } catch (IOException | IllegalArgumentException e) {
+                    log.info(e.getMessage());
+                }
+            }
+        }, "Ожидающий подключение");
+        WaitConnectionThread.start();
+    }
+
     public void start() {
         try {
             this.serverSocket = new ServerSocket(portNumber);
-            inWork = true;
+            this.inWork = true;
+            this.waitConnection();
             this.listenToClients();
             this.listenToConcole();
         } catch (IOException e) {
             log.info(e.getMessage());
-            //System.out.println(e.getMessage());
+            System.out.println(e.getMessage());
         }
-        while (inWork) {
+     /*   while (inWork) {
             Socket clientSocket;
             try {
                 clientSocket = serverSocket.accept();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
+                System.out.println("Попытка подключения");
+                //BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                //PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
                 ConnectionParameter connectionParameter = new ConnectionParameterBuilder()
                         .buildSocket(clientSocket)
                         .buildReader(new BufferedReader(new InputStreamReader(clientSocket.getInputStream())))
                         .buildWriter(new PrintWriter(clientSocket.getOutputStream())).build();
                 this.handleConnectionParameter(connectionParameter);
-                /*
+
                 String message = reader.readLine();
                 if (!message.isEmpty()) {
                     JSONDeserialization deserialization = new JSONDeserialization();
@@ -290,10 +307,10 @@ public class ServerModel {
                 clients.add(clientSocket);
                 this.sendMessageToEveryone(nickNames);
                 this.sendMessageToEveryone(new Message(userNickName + " присоединился к чату"));
-                log.info(clientSocket.toString());*/
+                log.info(clientSocket.toString());
             } catch (IOException | IllegalArgumentException e) {
                 log.info(e.getMessage());
             }
-        }
+        }*/
     }
 }

@@ -2,14 +2,12 @@ package ru.focusstart.contactlist;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javafx.beans.property.SimpleListProperty;
-//import ru.focusstart.controller.ContactListner;
-import ru.focusstart.encryption.Encryption;
 import ru.focusstart.jsonobject.JSONObject;
 
 import java.util.ArrayList;
 
-public class ContactList extends ArrayList<String> implements Encryption, JSONObject {
+public class ContactList extends ArrayList<String> implements JSONObject {
+    private final String ownName = "CONTACT_LIST";
  /*   private List<String> nickNames;
 
     public ContactList() {
@@ -21,22 +19,19 @@ public class ContactList extends ArrayList<String> implements Encryption, JSONOb
         this.nickNames = nickNames;
     }
 
-
-
     public boolean contains(String nickname) {
         return nickNames.contains(nickname);
     }*/
 
     public ContactList() {
         super();
-       // this.addListener(new ContactListner());
     }
 
     @Override
     public String serialize() {
         String serializedLogin;
         try {
-            serializedLogin =  new ObjectMapper().writeValueAsString(this);
+            serializedLogin = new ObjectMapper().writeValueAsString(this);
         } catch (JsonProcessingException e) {
             serializedLogin = "Сообщение не отправленно! Ошибка сериализации";
         }
@@ -46,6 +41,6 @@ public class ContactList extends ArrayList<String> implements Encryption, JSONOb
 
     @Override
     public String getOwnName() {
-        return "CONTACT_LIST";
+        return this.ownName;
     }
 }

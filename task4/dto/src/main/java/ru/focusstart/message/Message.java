@@ -1,29 +1,26 @@
 package ru.focusstart.message;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.focusstart.encryption.Encryption;
 import ru.focusstart.jsonobject.JSONObject;
-import ru.focusstart.model.ChatModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@JsonAutoDetect
-public class Message implements Encryption, JSONObject {
-   // KindsMessage kindMessage;
+public class Message implements JSONObject {
     private String text;
     private Date date;
+    private String ownName;
 
     public Message() {
         super();
+        this.date = new Date();
     }
 
-    public Message(/*KindsMessage kindMessage, */String text) {
-       // this.kindMessage = kindMessage;
+    public Message(String text) {
         this.text = text;
         this.date = new Date();
+        this.ownName = "MESSAGE";
     }
 
     public String getText() {
@@ -58,7 +55,7 @@ public class Message implements Encryption, JSONObject {
     public String serialize() {
         String serializedMessage;
         try {
-            serializedMessage =  new ObjectMapper().writeValueAsString(this);
+            serializedMessage = new ObjectMapper().writeValueAsString(this);
         } catch (JsonProcessingException e) {
             serializedMessage = "Сообщение не отправленно! Ошибка сериализации";
         }
@@ -68,21 +65,10 @@ public class Message implements Encryption, JSONObject {
 
     @Override
     public String getOwnName() {
-        return "MESSAGE";
+        return this.ownName;
     }
 
-/*
-    @Override
-    public Encryption deserialize(String serializedObject) {
-        Message deserializedMessage;
-        try {
-            System.out.println("До десериализации " + serializedObject);
-            deserializedMessage =  new ObjectMapper().readValue(serializedObject, Message.class);
-            System.out.println("После десериализации");
-        } catch (JsonProcessingException e) {
-            System.out.println("Ошибка в сереализации " + e.getMessage());
-            deserializedMessage = null;
-        }
-        return deserializedMessage;
-    }*/
+    protected void setOwnName(String ownName) {
+        this.ownName = ownName;
+    }
 }

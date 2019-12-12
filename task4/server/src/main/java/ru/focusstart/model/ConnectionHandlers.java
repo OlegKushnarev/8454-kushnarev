@@ -1,10 +1,9 @@
 package ru.focusstart.model;
 
 public enum ConnectionHandlers {
-    MESSAGE(new MessageExchangeHandler()),
-    //SERVICE_MESSAGE(new ServiceMessageHandler()),
-    //CONTACT_LIST(new ContactListHandler()),
     LOGIN(new ConnectionRequestHandler()),
+    MESSAGE(new MessageExchangeHandler()),
+    LOGOUT_SERVICE_MESSAGE(new LogoutHandler()),
     NONE(null);
 
     private ConnectionHandler ConnectionHandler;
