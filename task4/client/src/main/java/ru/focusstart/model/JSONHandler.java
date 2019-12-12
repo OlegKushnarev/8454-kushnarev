@@ -22,7 +22,7 @@ class MessageHandler implements JSONHandler {
             if (window instanceof MainWindow && jsonObject instanceof Message) {
                 MainWindow mainWindow = (MainWindow) window;
                 Message message = (Message) jsonObject;
-                mainWindow.getMessageArea().append(message + System.lineSeparator());
+                mainWindow.getChatArea().append(message + System.lineSeparator());
             }
         }
     }
@@ -84,7 +84,7 @@ class MessageDeliveredServiceMessageHandler implements JSONHandler {
             if (window instanceof MainWindow && jsonObject instanceof Message) {
                 MainWindow mainWindow = (MainWindow) window;
                 Message message = (Message) jsonObject;
-                mainWindow.getMessageArea().append(message + System.lineSeparator());
+                mainWindow.getChatArea().append(message + System.lineSeparator());
             }
         }
     }
