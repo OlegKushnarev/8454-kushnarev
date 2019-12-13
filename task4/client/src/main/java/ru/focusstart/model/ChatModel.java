@@ -19,6 +19,7 @@ public class ChatModel {
     private Socket socket;
     private SimpleBooleanProperty OnEnter;
     private SimpleBooleanProperty isConnect;
+    private String nickname;
     private SimpleObjectProperty<JSONObject> jsonObjectSimpleObject;
     BufferedReader reader;
     PrintWriter writer;
@@ -36,6 +37,7 @@ public class ChatModel {
         this.jsonObjectSimpleObject = new SimpleObjectProperty<>();
         this.jsonObjectSimpleObject.addListener(new Facade5());
         this.socket = null;
+        this.nickname = "";
     }
 
     public void login() {
@@ -45,6 +47,14 @@ public class ChatModel {
     public void isOnline() {
         this.OnEnter.set(false);
         this.isConnect.set(true);
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public void closeConnection() {
@@ -83,7 +93,6 @@ public class ChatModel {
     public void sendToServer(JSONObject jsonObject) {
         writer.println(jsonObject.serialize());
         writer.flush();
-        System.out.println("Логин отправлен");
     }
 
     public JSONObject getJSONObjectFromServer() {

@@ -16,6 +16,6 @@ class ConnectWindowCreater implements WindowCreater {
 
     @Override
     public Window createWindow() {
-        return new ConnectWindow(300, 150);
+        return new ConnectWindow(350, 150);
     }
 }

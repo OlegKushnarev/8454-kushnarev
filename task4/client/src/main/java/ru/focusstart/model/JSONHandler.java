@@ -65,7 +65,8 @@ class NicknameRejectedServiceMessageHandler implements JSONHandler {
     public void view(JSONObject jsonObject) {
         if (jsonObject != null) {
             if (jsonObject instanceof NicknameRejectedServiceMessage) {
-                //ServiceMessage serviceMessage = (ServiceMessage) jsonObject;
+                ChatModel chatClient = ChatModel.getInstance();
+                chatClient.setNickname("");
                 JOptionPane.showMessageDialog(new JFrame(),
                         "Nickname already taken",
                         "Connection error",

@@ -10,6 +10,6 @@ public class StopCommand extends Command {
 
     @Override
     public void execute() {
-        this.getServer().stop();
+        //this.getServer().stop();
     }
 }

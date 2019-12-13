@@ -10,6 +10,6 @@ public class StartCommand extends Command {
 
     @Override
     public void execute() {
-        this.getServer().start();
+        //this.getServer().start();
     }
 }

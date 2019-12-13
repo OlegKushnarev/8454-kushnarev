@@ -12,6 +12,7 @@ public class ConnectionParameter {
     BufferedReader reader;
     PrintWriter writer;
     String nickname;
+    String jsonstring;
     JSONObject jsonObject;
 
     public void setSocket(Socket socket) {
@@ -34,7 +35,11 @@ public class ConnectionParameter {
         this.jsonObject = jsonObject;
     }
 
-    public java.net.Socket getSocket() {
+    public void setJsonstring(String jsonstring) {
+        this.jsonstring = jsonstring;
+    }
+
+    public Socket getSocket() {
         return socket;
     }
 
@@ -52,6 +57,10 @@ public class ConnectionParameter {
 
     public JSONObject getJsonObject() {
         return jsonObject;
+    }
+
+    public String getJsonstring() {
+        return jsonstring;
     }
 
     public void close() {

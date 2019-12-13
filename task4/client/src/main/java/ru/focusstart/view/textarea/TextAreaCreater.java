@@ -10,7 +10,7 @@ class ChatAreaCreater implements TextAreaCreater {
 
     @Override
     public JTextArea getJTextArea() {
-        JTextArea chatArea = new JTextArea(20, 56);
+        JTextArea chatArea = new JTextArea(20, 55);
         chatArea.setLineWrap(true);
         chatArea.setWrapStyleWord(true);
         chatArea.setEditable(false);
@@ -32,7 +32,7 @@ class MessageAreaCreater implements TextAreaCreater {
 
     @Override
     public JTextArea getJTextArea() {
-        JTextArea messageArea = new JTextArea(5, 61);
+        JTextArea messageArea = new JTextArea(5, 58);
         messageArea.setLineWrap(true);
         messageArea.setWrapStyleWord(true);
         return messageArea;

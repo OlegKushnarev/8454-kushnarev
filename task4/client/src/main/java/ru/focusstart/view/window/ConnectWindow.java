@@ -21,17 +21,20 @@ public class ConnectWindow extends Window {
         serverAddressField.setToolTipText("Enter server address and port");
         nicknameField.setToolTipText("Enter your nickname");
 
-        JPanel jPanel = new JPanel();
-        jPanel.add(serverAddressLabel);
-        jPanel.add(serverAddressField);
-        jPanel.add(loginLabel);
-        jPanel.add(nicknameField);
+        JPanel serveraddress = new JPanel();
+        serveraddress.add(serverAddressLabel, BorderLayout.WEST);
+        serveraddress.add(serverAddressField, BorderLayout.EAST);
+
+        JPanel nickname = new JPanel();
+        nickname.add(loginLabel, BorderLayout.CENTER);
+        nickname.add(nicknameField, BorderLayout.CENTER);
 
         JPanel buttonPane = new JPanel();
         JButton enterButton = Buttons.ENTER.getButtonCreater().getButton();
-        buttonPane.add(enterButton);
+        buttonPane.add(enterButton, BorderLayout.CENTER);
 
-        this.add(jPanel, BorderLayout.CENTER);
+        this.add(serveraddress, BorderLayout.NORTH);
+        this.add(nickname, BorderLayout.CENTER);
         this.add(buttonPane, BorderLayout.SOUTH);
     }
 

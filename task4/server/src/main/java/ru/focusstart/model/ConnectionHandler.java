@@ -5,14 +5,16 @@ import ru.focusstart.jsonobject.JSONObject;
 import ru.focusstart.login.Login;
 import ru.focusstart.message.*;
 
+import java.io.IOException;
+
 public interface ConnectionHandler {
-    void handle(ConnectionParameter connectionParameter);
+    void handle(ConnectionParameter connectionParameter) throws IOException;
 }
 
 class ConnectionRequestHandler implements ConnectionHandler {
 
     @Override
-    public void handle(ConnectionParameter connectionParameter) {
+    public void handle(ConnectionParameter connectionParameter) throws IOException {
         JSONObject jsonObject = connectionParameter.getJsonObject();
         if (jsonObject instanceof Login) {
             Login login = (Login) jsonObject;
@@ -25,10 +27,6 @@ class ConnectionRequestHandler implements ConnectionHandler {
                 connectionParameter.setNickname(userNickName);
                 connectionParameter.setJsonObject(null);
                 chatServer.addConnection(connectionParameter);
-                /*
-                readers.add(reader);
-                writers.add(writer);
-                clients.add(clientSocket);*/
                 //TODO Сформировать сервисное сообщение что логин принят
                 chatServer.sendMessage(connectionParameter.getWriter(), new NicknameAcceptedServiceMessage());
                 //TODO Сформировать сообщение что контакт вошёл в чат
@@ -43,7 +41,7 @@ class ConnectionRequestHandler implements ConnectionHandler {
 class MessageExchangeHandler implements ConnectionHandler {
 
     @Override
-    public void handle(ConnectionParameter connectionParameter) {
+    public void handle(ConnectionParameter connectionParameter) throws IOException {
         JSONObject jsonObject = connectionParameter.getJsonObject();
         if (jsonObject instanceof Message) {
             Message message = (Message) jsonObject;
@@ -61,7 +59,7 @@ class MessageExchangeHandler implements ConnectionHandler {
 class LogoutHandler implements ConnectionHandler {
 
     @Override
-    public void handle(ConnectionParameter connectionParameter) {
+    public void handle(ConnectionParameter connectionParameter) throws IOException {
         JSONObject jsonObject = connectionParameter.getJsonObject();
         if (jsonObject instanceof LogoutServiceMessage) {
             LogoutServiceMessage message = (LogoutServiceMessage) jsonObject;
