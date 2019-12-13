@@ -1,11 +1,9 @@
 package ru.focusstart.controller;
 
-import ru.focusstart.view.WindowCreater;
-import ru.focusstart.view.Windows;
-import ru.focusstart.view.Window;
+import ru.focusstart.view.window.WindowCreater;
+import ru.focusstart.view.window.Windows;
+import ru.focusstart.view.window.Window;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 

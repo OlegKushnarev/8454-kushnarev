@@ -1,4 +1,4 @@
-package ru.focusstart.view;
+package ru.focusstart.view.window;
 
 public interface WindowCreater {
     Window createWindow();
@@ -8,7 +8,7 @@ class MainWindowCreater implements WindowCreater {
 
     @Override
     public MainWindow createWindow() {
-        return new MainWindow(800, 500/*, options*/);
+        return new MainWindow(800, 500);
     }
 }
 

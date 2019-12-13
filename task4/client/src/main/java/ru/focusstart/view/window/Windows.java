@@ -1,4 +1,4 @@
-package ru.focusstart.view;
+package ru.focusstart.view.window;
 
 public enum Windows {
     MAIN(new MainWindowCreater()),

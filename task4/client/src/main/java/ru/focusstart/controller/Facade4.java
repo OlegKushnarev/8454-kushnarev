@@ -2,10 +2,10 @@ package ru.focusstart.controller;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import ru.focusstart.view.MainWindow;
-import ru.focusstart.view.Window;
-import ru.focusstart.view.WindowCreater;
-import ru.focusstart.view.Windows;
+import ru.focusstart.view.window.MainWindow;
+import ru.focusstart.view.window.Window;
+import ru.focusstart.view.window.WindowCreater;
+import ru.focusstart.view.window.Windows;
 
 public class Facade4 implements ChangeListener<Boolean> {
     private static Window mainWindow;

@@ -4,8 +4,8 @@ import ru.focusstart.contactlist.ContactList;
 import ru.focusstart.jsonobject.JSONObject;
 import ru.focusstart.message.Message;
 import ru.focusstart.message.NicknameRejectedServiceMessage;
-import ru.focusstart.view.MainWindow;
-import ru.focusstart.view.Window;
+import ru.focusstart.view.window.MainWindow;
+import ru.focusstart.view.window.Window;
 
 import javax.swing.*;
 

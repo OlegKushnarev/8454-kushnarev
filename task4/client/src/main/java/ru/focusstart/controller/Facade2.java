@@ -1,12 +1,7 @@
 package ru.focusstart.controller;
 
-import ru.focusstart.model.ChatModel;
-import ru.focusstart.view.MainWindow;
-import ru.focusstart.view.Window;
-import ru.focusstart.view.WindowCreater;
-import ru.focusstart.view.Windows;
+import ru.focusstart.view.window.Window;
 
-import javax.swing.*;
 import java.util.Observable;
 import java.util.Observer;
 

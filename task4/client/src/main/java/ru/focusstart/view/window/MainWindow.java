@@ -1,14 +1,15 @@
-package ru.focusstart.view;
+package ru.focusstart.view.window;
 
 import ru.focusstart.controller.CloseListener;
 import ru.focusstart.controller.LogoutListener;
-import ru.focusstart.model.ChatModel;
+import ru.focusstart.view.button.Buttons;
+import ru.focusstart.view.textarea.TextAreas;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MainWindow extends Window {
-   private static Window currentInstance;
+    private static Window currentInstance;
     private JTextArea chatArea;
     private JTextArea messageArea;
     private JTextArea contactArea;
@@ -22,20 +23,13 @@ public class MainWindow extends Window {
     }
 
     public MainWindow(int width, int height) {
-        //super("Чат", width, height);
         super("Chat", width, height);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         chatArea = TextAreas.CHATAREA.getTextAreaCreater().getJTextArea();
         this.add(new JScrollPane(chatArea), BorderLayout.WEST);
-
         contactArea = TextAreas.CONTACTAREA.getTextAreaCreater().getJTextArea();
-     /*   for (String nickName :
-                nickNames) {
-            contactArea.setText(nickName);
-        }*/
         this.add(new JScrollPane(contactArea), BorderLayout.EAST);
-
         messageArea = TextAreas.MESSAGEAREA.getTextAreaCreater().getJTextArea();
         JPanel jPanel = new JPanel();
         jPanel.add(new JScrollPane(messageArea));

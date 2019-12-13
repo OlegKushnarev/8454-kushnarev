@@ -7,7 +7,6 @@ import ru.focusstart.connection.ConnectionParameterBuilder;
 import ru.focusstart.contactlist.ContactList;
 import ru.focusstart.jsonobject.JSONObject;
 import ru.focusstart.reader.PropertieReader;
-import ru.focusstart.encryption.Encryption;
 import ru.focusstart.serialization.JSONDeserialization;
 
 import java.io.BufferedReader;
@@ -62,35 +61,23 @@ public class ServerModel {
         this.connections.remove(connection);
     }
 
-    private void listenToConcole() {
-        Thread commandListenerThread = new Thread(() -> {
-            while (this.inWork) {
-                try {
-                    String command;
-                    if (this.concoleReader.ready()) {
-                        command = this.concoleReader.readLine();
-                        if (command.equals("server stop")) {
-                            this.serverSocket.close();
-                            log.info(serverSocket.toString());
-                            if (!connections.isEmpty()) {
-                                for (ConnectionParameter connection :
-                                        connections) {
-                                    if (connection.getSocket().isConnected()) {
-                                        connection.close();
-                                        log.info(connection.toString());
-                                    }
-                                }
-                            }
-                            this.inWork = false;
-                            //break;
-                        }
-                    }
-                } catch (IOException e) {
-                    log.info(e.getMessage());
+    public void stop() {
+        try {
+            this.serverSocket.close();
+        } catch (IOException e) {
+            e.getMessage();
+        }
+        log.info(serverSocket.toString());
+        if (!connections.isEmpty()) {
+            for (ConnectionParameter connection :
+                    connections) {
+                if (connection.getSocket().isConnected()) {
+                    connection.close();
+                    log.info(connection.toString());
                 }
             }
-        });
-        commandListenerThread.start();
+        }
+        this.inWork = false;
     }
 
     private void listenToClients() {
@@ -218,7 +205,7 @@ public class ServerModel {
             this.inWork = true;
             this.waitConnection();
             this.listenToClients();
-            this.listenToConcole();
+            this.stop();
         } catch (IOException e) {
             log.info(e.getMessage());
             System.out.println(e.getMessage());

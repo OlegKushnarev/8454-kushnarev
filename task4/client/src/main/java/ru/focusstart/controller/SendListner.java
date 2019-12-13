@@ -2,7 +2,7 @@ package ru.focusstart.controller;
 
 import ru.focusstart.message.Message;
 import ru.focusstart.model.ChatModel;
-import ru.focusstart.view.MainWindow;
+import ru.focusstart.view.window.MainWindow;
 
 import javax.swing.*;
 import java.awt.*;

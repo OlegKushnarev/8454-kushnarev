@@ -2,7 +2,7 @@ package ru.focusstart.controller;
 
 import ru.focusstart.login.Login;
 import ru.focusstart.model.ChatModel;
-import ru.focusstart.view.ConnectWindow;
+import ru.focusstart.view.window.ConnectWindow;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,7 +35,7 @@ public class LoginListener implements ActionListener {
             if (serverAddressParts.length < 2) {
                 throw new IllegalArgumentException("Не введён порт для подключения к серверу!");
             }
-            JTextField login = connectWindow.getLogin();
+            JTextField login = connectWindow.getNicknameField();
             String nickName = login.getText();
             if (nickName.isEmpty()) {
                 throw new IllegalArgumentException("Не введён ник!");
