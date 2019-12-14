@@ -6,7 +6,7 @@ import ru.focusstart.jsonobject.JSONObject;
 import ru.focusstart.model.JSONHandler;
 import ru.focusstart.model.JSONHandlers;
 
-public class Facade5 implements ChangeListener<JSONObject> {
+public class JSONObjectListner implements ChangeListener<JSONObject> {
 
     @Override
     public void changed(ObservableValue<? extends JSONObject> observableValue, JSONObject jsonObject, JSONObject t1) {

@@ -1,30 +1,28 @@
 package ru.focusstart.model;
 
 import ru.focusstart.connection.ConnectionParameter;
-import ru.focusstart.connection.ConnectionParameterBuilder;
 import ru.focusstart.contactlist.ContactList;
 import ru.focusstart.jsonobject.JSONObject;
 import ru.focusstart.reader.PropertieReader;
-import ru.focusstart.serialization.JSONDeserialization;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.*;
 
 public class ServerModel {
     private static ServerModel instance;
     private int portNumber;
-    private boolean inWork;
+    //private boolean inWork;
     ServerSocket serverSocket;
     List<ConnectionParameter> onLineConnections;
     BlockingQueue<ConnectionParameter> processConnections;
+    /*Thread WaitConnectionThread;
+    Thread messageListenerThread;
+    Thread handleThread;*/
+    ExecutorService executorService;
 
     //private static final Logger log = LoggerFactory.getLogger(ServerModel.class);
 
@@ -40,7 +38,7 @@ public class ServerModel {
         this.portNumber = Integer.parseInt(portNumberReader.read("server.port"));
         this.onLineConnections = new CopyOnWriteArrayList<>();
         this.processConnections = new SynchronousQueue<>();
-        this.inWork = false;
+        //this.inWork = false;
     }
 
     public void addConnection(ConnectionParameter connection) {
@@ -50,14 +48,14 @@ public class ServerModel {
     public void removeConnection(ConnectionParameter connection) {
         this.onLineConnections.remove(connection);
     }
-
+/*
     public JSONObject getJSONObject(String message) {
         if (message != null && !message.isEmpty()) {
             JSONDeserialization deserialization = new JSONDeserialization();
             return deserialization.deserialize(message);
         }
         return null;
-    }
+    }*/
 
     private String readMessage(BufferedReader reader) throws IOException {
        /* if (reader.ready()) {
@@ -89,10 +87,10 @@ public class ServerModel {
         }
         return false;
     }
-
+/*
     public void handleConnectionParameter() {
         Thread handleThread = new Thread(() -> {
-            /*
+
             try {
                 ConnectionParameter connectionParameter = this.processConnections.take();
                 BufferedReader reader = connectionParameter.getReader();
@@ -112,27 +110,10 @@ public class ServerModel {
                 }
             } catch (InterruptedException | IOException e) {
                 e.printStackTrace();
-            }*/
-            //ConnectionParameter connectionParameter = null;
-            if (this.inWork) {
-                try {
-                    ConnectionParameter connectionParameter = this.processConnections.take();
-                    JSONObject jsonObject = this.getJSONObject(connectionParameter.getJsonstring());
-                    if (jsonObject != null) {
-                        System.out.println("Сообщение принято");
-                        connectionParameter.setJsonObject(jsonObject);
-                        ConnectionHandler connectionHandler = ConnectionHandlers.valueOf(jsonObject.getOwnName()).getConnectionHandler();
-                        System.out.println(connectionHandler.getClass().getSimpleName());
-                        connectionHandler.handle(connectionParameter);
-                    }
-                } catch (InterruptedException | IOException e) {
-                    e.getMessage();
-                }
-            }
 
         });
         handleThread.start();
-    }
+    }}*/
 
     public ContactList getContactList() {
         ContactList contactList = new ContactList();
@@ -142,7 +123,7 @@ public class ServerModel {
         }
         return contactList;
     }
-
+/*
     public void waitConnection() {
         Thread WaitConnectionThread = new Thread(() -> {
             while (this.inWork) {
@@ -169,8 +150,8 @@ public class ServerModel {
             }
         });
         WaitConnectionThread.start();
-    }
-
+    }*/
+/*
     private void listenToClients() {
         Thread messageListenerThread = new Thread(() -> {
             //boolean interrupted = false;
@@ -202,20 +183,47 @@ public class ServerModel {
             }
         });
         messageListenerThread.start();
-    }
+    }*/
 
     public void start() throws IOException {
         this.serverSocket = new ServerSocket(portNumber);
-        this.inWork = true;
+        //this.inWork = true;
+      /*  this.WaitConnectionThread = new Thread(new ClientWaiters(serverSocket, processConnections));
+        this.messageListenerThread = new Thread(new ClientsListner(processConnections, onLineConnections));
+        this.handleThread = new Thread(new Handler(processConnections));
+        this.WaitConnectionThread.start();
+        this.messageListenerThread.start();
+        this.handleThread.start();*/
+
+        this.executorService = Executors.newFixedThreadPool(3);
+        this.executorService.execute(new ClientWaiters(serverSocket, processConnections));
+        this.executorService.execute(new ClientsHandler(processConnections, onLineConnections));
+        this.executorService.execute(new Handler(processConnections));
+    /*
         this.waitConnection();
         this.listenToClients();
-        this.handleConnectionParameter();
+        this.handleConnectionParameter();*/
     }
 
     public void stop() throws IOException {
+        executorService.shutdownNow();
+        //this.inWork = false;
+       /* this.WaitConnectionThread.interrupt();
+        this.messageListenerThread.interrupt();
+        this.handleThread.interrupt();*/
+        /*
+        try {
+            this.WaitConnectionThread.join();
+            this.messageListenerThread.join();
+            this.handleThread.join();
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage());
+        }*/
+
         if (!this.serverSocket.isClosed()) {
             this.serverSocket.close();
         }
+        //TODO отправить всем сервисное сообщение что сервер остановлен
         //log.info(serverSocket.toString());
         if (!onLineConnections.isEmpty()) {
             for (ConnectionParameter connection :
@@ -226,6 +234,6 @@ public class ServerModel {
                 }
             }
         }
-        this.inWork = false;
+
     }
 }

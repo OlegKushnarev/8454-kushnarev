@@ -6,7 +6,7 @@ import ru.focusstart.view.window.Window;
 import ru.focusstart.view.window.WindowCreater;
 import ru.focusstart.view.window.Windows;
 
-public class Facade3 implements ChangeListener<Boolean> {
+public class ConnectionWindowListner implements ChangeListener<Boolean> {
     private static Window connectWindow;
 
     @Override

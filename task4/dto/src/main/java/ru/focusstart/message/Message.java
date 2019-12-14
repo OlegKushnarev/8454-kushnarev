@@ -1,7 +1,5 @@
 package ru.focusstart.message;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.focusstart.jsonobject.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -40,11 +38,7 @@ public class Message implements JSONObject {
     public void setText(String text) {
         this.text = text;
     }
-/*
-    public void setDate(Date date) {
-        this.date = date;
-    }
-*/
+
     @Override
     public String getOwnName() {
         return this.ownName;
@@ -62,11 +56,6 @@ public class Message implements JSONObject {
         this.senderName = senderName;
     }
 
-    /*
-    public boolean isEmpty() {
-        return this.message.isEmpty();
-    }*/
-
     @Override
     public String toString() {
         SimpleDateFormat dateFormat = new SimpleDateFormat();
@@ -74,20 +63,8 @@ public class Message implements JSONObject {
         stringMessage.append(dateFormat.format(this.date))
                 .append(" ")
                 .append(this.senderName)
-                .append(": ").
-                append(this.text);
+                .append(": ")
+                .append(this.text);
         return stringMessage.toString();
-    }
-
-    @Override
-    public String serialize() {
-        String serializedMessage;
-        try {
-            serializedMessage = new ObjectMapper().writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            serializedMessage = "Сообщение не отправленно! Ошибка сериализации";
-        }
-
-        return serializedMessage;
     }
 }

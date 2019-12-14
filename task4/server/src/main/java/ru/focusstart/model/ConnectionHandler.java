@@ -48,7 +48,6 @@ class MessageExchangeHandler implements ConnectionHandler {
             if (!message.getText().isEmpty()) {
                 ServerModel chatServer = ServerModel.getInstance();
                 chatServer.sendMessageToEveryone(message);
-                //TODO Сформировать сообщение что сообщение отправлено
                 chatServer.sendMessage(connectionParameter.getWriter(), new MessageDeliveredServiceMessage());
             }
             connectionParameter.setJsonObject(null);

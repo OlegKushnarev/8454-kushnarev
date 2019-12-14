@@ -9,7 +9,7 @@ import ru.focusstart.model.ChatModel;
 
 import javax.swing.*;
 
-public class Facade6 implements ChangeListener<Boolean> {
+public class LogoutListner implements ChangeListener<Boolean> {
 
     @Override
     public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {

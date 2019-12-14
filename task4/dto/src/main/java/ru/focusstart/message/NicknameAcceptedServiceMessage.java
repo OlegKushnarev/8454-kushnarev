@@ -6,9 +6,4 @@ public class NicknameAcceptedServiceMessage extends ServiceMessage {
         super();
         this.setOwnName("NICKNAME_ACCEPTED_SERVICE_MESSAGE");
     }
-/*
-    @Override
-    public String getOwnName() {
-        return "NICKNAME_ACCEPTED_SERVICE_MESSAGE";
-    }*/
 }

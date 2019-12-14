@@ -12,7 +12,7 @@ public class ContactList extends ArrayList<String> implements JSONObject {
     public ContactList() {
         super();
     }
-
+/*
     @Override
     public String serialize() {
         String serializedLogin;
@@ -23,7 +23,7 @@ public class ContactList extends ArrayList<String> implements JSONObject {
         }
 
         return serializedLogin;
-    }
+    }*/
 
     @Override
     public String getOwnName() {

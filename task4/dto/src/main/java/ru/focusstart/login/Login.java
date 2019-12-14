@@ -1,7 +1,5 @@
 package ru.focusstart.login;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.focusstart.jsonobject.JSONObject;
 
 public class Login implements JSONObject {
@@ -19,14 +17,6 @@ public class Login implements JSONObject {
         this.portNumber = portNumber;
         this.userNickname = userNickname;
     }
-/*
-    public Login(String fullFileName) throws IOException {
-
-
-        this(loginReader.read("server.address"),
-                Integer.parseInt(loginReader.read("server.port")),
-                loginReader.read("nickname"));
-    }*/
 
     public String getServerAddress() {
         return serverAddress;
@@ -41,33 +31,8 @@ public class Login implements JSONObject {
     }
 
     @Override
-    public String serialize() {
-        String serializedLogin;
-        try {
-            serializedLogin = new ObjectMapper().writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            serializedLogin = "Сообщение не отправленно! Ошибка сериализации";
-        }
-
-        return serializedLogin;
-    }
-
-    @Override
     public String getOwnName() {
         return this.ownName;
     }
-/*
-    @Override
-    public Encryption deserialize(String serializedObject) {
-        Login deserializedLogin;
-        try {
-            System.out.println("До десериализации " + serializedObject);
-            deserializedLogin =  new ObjectMapper().readValue(serializedObject, Login.class);
-            System.out.println("После десериализации");
-        } catch (JsonProcessingException e) {
-            System.out.println("Ошибка в сереализации " + e.getMessage());
-            deserializedLogin = null;
-        }
-        return deserializedLogin;
-    }*/
+
 }

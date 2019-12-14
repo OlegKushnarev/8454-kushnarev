@@ -2,7 +2,7 @@ package ru.focusstart.model;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import ru.focusstart.controller.Facade5;
+import ru.focusstart.controller.JSONObjectListner;
 import ru.focusstart.jsonobject.JSONObject;
 import ru.focusstart.login.Login;
 import ru.focusstart.model.booleanproperties.BooleanProperties;
@@ -35,7 +35,7 @@ public class ChatModel {
         this.OnEnter = BooleanProperties.ON_ENTER.getBooleanPropertiesCreater().getBooleanProperty();
         this.isConnect = BooleanProperties.IS_CONNECT.getBooleanPropertiesCreater().getBooleanProperty();
         this.jsonObjectSimpleObject = new SimpleObjectProperty<>();
-        this.jsonObjectSimpleObject.addListener(new Facade5());
+        this.jsonObjectSimpleObject.addListener(new JSONObjectListner());
         this.socket = null;
         this.nickname = "";
     }
@@ -122,14 +122,11 @@ public class ChatModel {
             //boolean interrupted = false;
             while (true) {
                 JSONObject jsonObject = this.getJSONObjectFromServer();
-                if (jsonObject == null) {
-                    System.out.println("Сервер прислал лажу");
-                } else {
-                    System.out.println("Ответ получен");
+                if (jsonObject != null) {
                     this.jsonObjectSimpleObject.set(jsonObject);
                 }
             }
-        }, "Наблюдатель за сервером");
+        });
         ListenerServerThread.start();
     }
 }
