@@ -6,6 +6,7 @@ public enum JSONHandlers {
     NICKNAME_ACCEPTED_SERVICE_MESSAGE(new NicknameAcceptedServiceMessageHandler()),
     NICKNAME_REJECTED_SERVICE_MESSAGE(new NicknameRejectedServiceMessageHandler()),
     MESSAGE_DELIVERED_SERVICE_MESSAGE(new MessageDeliveredServiceMessageHandler()),
+    SERVER_STOP_SERVICE_MESSAGE(new ServerStopServiceMessageHandler()),
     NONE(null);
 
     private JSONHandler jsonHandler;

@@ -11,7 +11,6 @@ public class ConnectWindow extends Window {
 
     public ConnectWindow(int width, int height) {
         super("Connect", width, height);
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         JLabel serverAddressLabel = new JLabel("Server address and port: ");
         serverAddressField = new JTextField(15);

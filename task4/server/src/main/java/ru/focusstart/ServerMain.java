@@ -15,14 +15,14 @@ public class ServerMain {
             System.out.println("Для остановки сервера введите server stop");
             BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
             while (true) {
-               // if (consoleReader.ready()) {
-                    String command = consoleReader.readLine();
-                    if (command.equals("server stop")) {
-                        chatServer.stop();
-                        System.out.println("Сервер остановлен");
-                        break;
-                    }
-              //  }
+                // if (consoleReader.ready()) {
+                String command = consoleReader.readLine();
+                if (command.equals("server stop")) {
+                    chatServer.stop();
+                    System.out.println("Сервер остановлен");
+                    break;
+                }
+                //  }
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());

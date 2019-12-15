@@ -3,9 +3,9 @@ package ru.focusstart.model;
 import ru.focusstart.connection.ConnectionParameter;
 import ru.focusstart.contactlist.ContactList;
 import ru.focusstart.jsonobject.JSONObject;
+import ru.focusstart.message.ServerStopServiceMessage;
 import ru.focusstart.reader.PropertieReader;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -15,7 +15,6 @@ import java.util.concurrent.*;
 public class ServerModel {
     private static ServerModel instance;
     private int portNumber;
-    //private boolean inWork;
     ServerSocket serverSocket;
     List<ConnectionParameter> onLineConnections;
     BlockingQueue<ConnectionParameter> processConnections;
@@ -23,8 +22,6 @@ public class ServerModel {
     Thread messageListenerThread;
     Thread handleThread;*/
     ExecutorService executorService;
-
-    //private static final Logger log = LoggerFactory.getLogger(ServerModel.class);
 
     public static ServerModel getInstance() throws IOException {
         if (instance == null) {
@@ -38,7 +35,6 @@ public class ServerModel {
         this.portNumber = Integer.parseInt(portNumberReader.read("server.port"));
         this.onLineConnections = new CopyOnWriteArrayList<>();
         this.processConnections = new SynchronousQueue<>();
-        //this.inWork = false;
     }
 
     public void addConnection(ConnectionParameter connection) {
@@ -51,14 +47,18 @@ public class ServerModel {
 
 
     public void sendMessage(PrintWriter writer, JSONObject jsonObject) {
-        writer.println(jsonObject.serialize());
-        writer.flush();
+        if (writer != null) {
+            writer.println(jsonObject.serialize());
+            writer.flush();
+        }
     }
 
     public void sendMessageToEveryone(JSONObject jsonObject) {
-        for (ConnectionParameter connection :
-                onLineConnections) {
-            sendMessage(connection.getWriter(), jsonObject);
+        if (!onLineConnections.isEmpty()) {
+            for (ConnectionParameter connection :
+                    onLineConnections) {
+                sendMessage(connection.getWriter(), jsonObject);
+            }
         }
     }
 
@@ -101,7 +101,8 @@ public class ServerModel {
         this.handleConnectionParameter();*/
     }
 
-    public void stop() throws IOException {
+    public void stop() {
+        this.sendMessageToEveryone(new ServerStopServiceMessage());
         executorService.shutdownNow();
         //this.inWork = false;
        /* this.WaitConnectionThread.interrupt();
@@ -116,20 +117,21 @@ public class ServerModel {
             System.out.println(e.getMessage());
         }*/
 
-        if (!this.serverSocket.isClosed()) {
-            this.serverSocket.close();
-        }
-        //TODO отправить всем сервисное сообщение что сервер остановлен
-        //log.info(serverSocket.toString());
-        if (!onLineConnections.isEmpty()) {
-            for (ConnectionParameter connection :
-                    onLineConnections) {
-                if (connection.getSocket().isConnected()) {
-                    connection.close();
-                    //log.info(connection.toString());
+        try {
+            if (!this.serverSocket.isClosed()) {
+                this.serverSocket.close();
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (!onLineConnections.isEmpty()) {
+                for (ConnectionParameter connection :
+                        onLineConnections) {
+                    if (connection.getSocket().isConnected()) {
+                        connection.close();
+                    }
                 }
             }
         }
-
     }
 }

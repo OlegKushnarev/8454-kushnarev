@@ -19,6 +19,7 @@ public class ChatModel {
     private Socket socket;
     private SimpleBooleanProperty OnEnter;
     private SimpleBooleanProperty isConnect;
+    private boolean listenerTreadInterrupte;
     private String nickname;
     private SimpleObjectProperty<JSONObject> jsonObjectSimpleObject;
     BufferedReader reader;
@@ -50,7 +51,7 @@ public class ChatModel {
     }
 
     public String getNickname() {
-        return nickname;
+        return this.nickname;
     }
 
     public void setNickname(String nickname) {
@@ -59,51 +60,59 @@ public class ChatModel {
 
     public void closeConnection() {
         try {
-            if (socket != null) {
-                socket.close();
-                System.out.println("Соединение разорвано.");
+            if (this.socket != null && this.socket.isConnected()) {
+                this.socket.close();
+            }
+            if (this.reader != null) {
+                this.reader.close();
+            }
+            if (this.writer != null) {
+                this.writer.close();
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
+        } finally {
+            this.listenerTreadInterrupte = true;
+            this.nickname = "";
         }
     }
 
-    public void waitExit() {
-        Runtime.getRuntime().addShutdownHook(new Thread(this::exitFromChat));
+    public void exitFromChat() {
+        this.isConnect.set(false);
+        this.closeConnection();
     }
 
-    public void exitFromChat() {
-        this.closeConnection();
-        this.isConnect.set(false);
-    }
-/*
     public void closeClient() {
         this.exitFromChat();
-    }*/
+        System.exit(0);
+    }
 
     public void connectToServer(Login login) throws IOException {
-        Socket socket = new Socket(login.getServerAddress(), login.getPortNumber());
-        reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        writer = new PrintWriter(socket.getOutputStream());
+        this.socket = new Socket(login.getServerAddress(), login.getPortNumber());
+        this.reader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        this.writer = new PrintWriter(this.socket.getOutputStream());
+        this.listenerTreadInterrupte = false;
         this.sendToServer(login);
         this.listenToServer();
     }
 
     public void sendToServer(JSONObject jsonObject) {
-        writer.println(jsonObject.serialize());
-        writer.flush();
+        if (this.writer != null) {
+            this.writer.println(jsonObject.serialize());
+            this.writer.flush();
+        }
     }
 
     public JSONObject getJSONObjectFromServer() {
-        String message = "";
-        while (message.isEmpty()) {
+        while (true) {
             try {
-                if (reader.ready()) {
-                    message = reader.readLine();
-                    //break;
+                if (this.reader.ready()) {
+                    JSONDeserialization deserialization = new JSONDeserialization();
+                    return deserialization.deserialize(this.reader.readLine());
                 }
             } catch (IOException e) {
                 System.out.println(e.getMessage());
+                break;
             }
 
             try {
@@ -112,14 +121,12 @@ public class ChatModel {
                 System.out.println(e.getMessage());
             }
         }
-        JSONDeserialization deserialization = new JSONDeserialization();
-        return deserialization.deserialize(message);
+        return null;
     }
 
     public void listenToServer() {
         Thread ListenerServerThread = new Thread(() -> {
-            //boolean interrupted = false;
-            while (true) {
+            while (!this.listenerTreadInterrupte) {
                 JSONObject jsonObject = this.getJSONObjectFromServer();
                 if (jsonObject != null) {
                     this.jsonObjectSimpleObject.set(jsonObject);

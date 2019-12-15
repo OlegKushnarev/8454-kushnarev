@@ -2,12 +2,8 @@ package ru.focusstart.controller;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import ru.focusstart.jsonobject.JSONObject;
 import ru.focusstart.message.LogoutServiceMessage;
-import ru.focusstart.message.ServiceMessage;
 import ru.focusstart.model.ChatModel;
-
-import javax.swing.*;
 
 public class LogoutListener implements ChangeListener<Boolean> {
 
@@ -16,7 +12,6 @@ public class LogoutListener implements ChangeListener<Boolean> {
         if (!t1) {
             ChatModel chatClient = ChatModel.getInstance();
             chatClient.sendToServer(new LogoutServiceMessage());
-            System.out.println("Отправили на сервер что вышли");
         }
     }
 }

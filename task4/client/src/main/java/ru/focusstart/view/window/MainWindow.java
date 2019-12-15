@@ -24,7 +24,6 @@ public class MainWindow extends Window {
 
     public MainWindow(int width, int height) {
         super("Chat", width, height);
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         chatArea = TextAreas.CHATAREA.getTextAreaCreater().getJTextArea();
         this.add(new JScrollPane(chatArea), BorderLayout.WEST);

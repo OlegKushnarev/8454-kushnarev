@@ -30,7 +30,7 @@ class ConnectionRequestHandler implements ConnectionHandler {
                 connectionParameter.setJsonObject(null);
                 chatServer.addConnection(connectionParameter);
                 chatServer.sendMessage(connectionParameter.getWriter(), new NicknameAcceptedServiceMessage());
-                chatServer.sendMessageToEveryone(new Message("server: ", userNickName + " присоединился к чату"));
+                chatServer.sendMessageToEveryone(new Message("server", userNickName + " присоединился к чату"));
                 chatServer.sendMessageToEveryone(chatServer.getContactList());
             }
         }

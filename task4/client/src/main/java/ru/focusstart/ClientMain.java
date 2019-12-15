@@ -6,6 +6,5 @@ public class ClientMain {
     public static void main(String[] args) {
         ChatModel chatClient = ChatModel.getInstance();
         chatClient.login();
-        chatClient.waitExit();
     }
 }

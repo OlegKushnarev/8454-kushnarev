@@ -30,15 +30,15 @@ public class LoginListener implements ActionListener {
             String serverAddress = serverAddressField.getText();
             String[] serverAddressParts = serverAddress.split(":");
             if (serverAddressParts.length == 0) {
-                throw new IllegalArgumentException("Не введён адрес сервера!");
+                throw new IllegalArgumentException("Server address not entered!");
             }
             if (serverAddressParts.length < 2) {
-                throw new IllegalArgumentException("Не введён порт для подключения к серверу!");
+                throw new IllegalArgumentException("The port for connecting to the server is not entered!");
             }
             JTextField login = connectWindow.getNicknameField();
             String nickName = login.getText();
             if (nickName.isEmpty()) {
-                throw new IllegalArgumentException("Не введён ник!");
+                throw new IllegalArgumentException("Nickname not entered!");
             }
 
             ChatModel chatClient = ChatModel.getInstance();
@@ -47,7 +47,7 @@ public class LoginListener implements ActionListener {
         } catch (IllegalArgumentException | IOException e) {
             JOptionPane.showMessageDialog(new JFrame(),
                     e.getMessage(),
-                    "Ошибка подключения",
+                    "Connection error",
                     JOptionPane.ERROR_MESSAGE);
         }
     }

@@ -28,7 +28,6 @@ public class SendListner implements ActionListener {
         String messageString = messageArea.getText();
         if (!messageString.isEmpty()) {
             ChatModel chatClient = ChatModel.getInstance();
-            System.out.println("Nickname " + chatClient.getNickname());
             Message message = new Message(chatClient.getNickname(), messageString);
             chatClient.sendToServer(message);
         }

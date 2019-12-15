@@ -67,7 +67,7 @@ class NicknameRejectedServiceMessageHandler implements JSONHandler {
         if (jsonObject != null) {
             if (jsonObject instanceof Message) {
                 ChatModel chatClient = ChatModel.getInstance();
-                chatClient.setNickname("");
+                chatClient.closeConnection();
                 JOptionPane.showMessageDialog(new JFrame(),
                         "Nickname already taken",
                         "Connection error",
@@ -87,6 +87,24 @@ class MessageDeliveredServiceMessageHandler implements JSONHandler {
                 MainWindow mainWindow = (MainWindow) window;
                 Message message = (Message) jsonObject;
                 mainWindow.getChatArea().append(message + System.lineSeparator());
+            }
+        }
+    }
+}
+
+class ServerStopServiceMessageHandler implements JSONHandler {
+
+    @Override
+    public void view(JSONObject jsonObject) {
+        if (jsonObject != null) {
+            if (jsonObject instanceof Message) {
+                ChatModel chatClient = ChatModel.getInstance();
+                chatClient.exitFromChat();
+                chatClient.login();
+                JOptionPane.showMessageDialog(new JFrame(),
+                        "Server stop",
+                        "Connection error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
     }
