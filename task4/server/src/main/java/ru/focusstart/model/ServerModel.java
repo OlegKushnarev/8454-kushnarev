@@ -48,23 +48,7 @@ public class ServerModel {
     public void removeConnection(ConnectionParameter connection) {
         this.onLineConnections.remove(connection);
     }
-/*
-    public JSONObject getJSONObject(String message) {
-        if (message != null && !message.isEmpty()) {
-            JSONDeserialization deserialization = new JSONDeserialization();
-            return deserialization.deserialize(message);
-        }
-        return null;
-    }*/
 
-    private String readMessage(BufferedReader reader) throws IOException {
-       /* if (reader.ready()) {
-            System.out.println("Пытаемся читать");
-            return reader.readLine();
-        }
-        return "";*/
-        return reader.readLine();
-    }
 
     public void sendMessage(PrintWriter writer, JSONObject jsonObject) {
         writer.println(jsonObject.serialize());
@@ -87,33 +71,6 @@ public class ServerModel {
         }
         return false;
     }
-/*
-    public void handleConnectionParameter() {
-        Thread handleThread = new Thread(() -> {
-
-            try {
-                ConnectionParameter connectionParameter = this.processConnections.take();
-                BufferedReader reader = connectionParameter.getReader();
-                if (reader != null) {
-                    String str = this.readMessage(reader);
-                    if (!str.isEmpty()) {
-                        System.out.println(str);
-                        JSONObject jsonObject = this.getJSONObject(str);
-                        if (jsonObject != null) {
-                            System.out.println("Сообщение принято");
-                            connectionParameter.setJsonObject(jsonObject);
-                            ConnectionHandler connectionHandler = ConnectionHandlers.valueOf(jsonObject.getOwnName()).getConnectionHandler();
-                            System.out.println(connectionHandler.getClass().getSimpleName());
-                            connectionHandler.handle(connectionParameter);
-                        }
-                    }
-                }
-            } catch (InterruptedException | IOException e) {
-                e.printStackTrace();
-
-        });
-        handleThread.start();
-    }}*/
 
     public ContactList getContactList() {
         ContactList contactList = new ContactList();
@@ -123,67 +80,6 @@ public class ServerModel {
         }
         return contactList;
     }
-/*
-    public void waitConnection() {
-        Thread WaitConnectionThread = new Thread(() -> {
-            while (this.inWork) {
-                Socket clientSocket;
-                try {
-                    clientSocket = serverSocket.accept();
-                    System.out.println("Попытка подключения");
-                    ConnectionParameter connectionParameter = new ConnectionParameterBuilder()
-                            .buildSocket(clientSocket)
-                            .buildReader(new BufferedReader(new InputStreamReader(clientSocket.getInputStream())))
-                            .buildWriter(new PrintWriter(clientSocket.getOutputStream())).build();
-                    this.processConnections.put(connectionParameter);
-                    //this.handleConnectionParameter(connectionParameter);
-                } catch (IOException | InterruptedException e) {
-                    //log.info(e.getMessage());
-                    System.out.println(e.getMessage());
-                }
-
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-        });
-        WaitConnectionThread.start();
-    }*/
-/*
-    private void listenToClients() {
-        Thread messageListenerThread = new Thread(() -> {
-            //boolean interrupted = false;
-            while (this.inWork) {
-                // System.out.println("слушаю клиентов");
-                if (!onLineConnections.isEmpty()) {
-                    for (ConnectionParameter connection :
-                            onLineConnections) {
-                        try {
-                            BufferedReader reader = connection.getReader();
-                            if (reader != null) {
-                                String str = this.readMessage(reader);
-                                if (!str.isEmpty()) {
-                                    connection.setJsonstring(str);
-                                    this.processConnections.put(connection);
-                                }
-                            }
-                        } catch (InterruptedException | IOException e) {
-                            //log.info(e.getMessage());
-                            System.out.println(e.getMessage());
-                        }
-                    }
-                }
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-        });
-        messageListenerThread.start();
-    }*/
 
     public void start() throws IOException {
         this.serverSocket = new ServerSocket(portNumber);

@@ -12,7 +12,6 @@ public class ConnectionParameter {
     BufferedReader reader;
     PrintWriter writer;
     String nickname;
-    //String jsonstring;
     JSONObject jsonObject;
 
     public void setSocket(Socket socket) {
@@ -35,11 +34,6 @@ public class ConnectionParameter {
         this.jsonObject = jsonObject;
     }
 
-    /*
-    public void setJsonstring(String jsonstring) {
-        this.jsonstring = jsonstring;
-    }*/
-
     public Socket getSocket() {
         return socket;
     }
@@ -59,19 +53,24 @@ public class ConnectionParameter {
     public JSONObject getJsonObject() {
         return jsonObject;
     }
-
-    private synchronized String readMessage(BufferedReader reader) throws IOException {
-        if (reader.ready()) {
+/*
+    private synchronized String readMessage() throws IOException {
+        if (this.reader != null && this.reader.ready()) {
             return reader.readLine();
         }
         return "";
-       // return this.reader.readLine();
-    }
-
-/*
-    public String getJsonstring() {
-        return jsonstring;
     }*/
+
+    public synchronized boolean isReady() {
+        if (this.reader != null) {
+            try {
+                return this.reader.ready();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return false;
+    }
 
     public void close() {
         try {

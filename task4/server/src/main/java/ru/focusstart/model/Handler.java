@@ -4,7 +4,6 @@ import ru.focusstart.connection.ConnectionParameter;
 import ru.focusstart.jsonobject.JSONObject;
 import ru.focusstart.serialization.JSONDeserialization;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
@@ -28,9 +27,9 @@ public class Handler implements Runnable {
         try {
             while (!Thread.interrupted()) {
                 ConnectionParameter connectionParameter = this.processConnections.take();
-                BufferedReader reader = connectionParameter.getReader();
-                if (reader != null && reader.ready()) {
-                    String str = reader.readLine();
+                //BufferedReader reader = connectionParameter.getReader();
+               // if (connectionParameter.isReady()) {
+                    String str = connectionParameter.getReader().readLine();
                     if (str != null && !str.isEmpty()) {
                         JSONObject jsonObject = this.getJSONObject(str);
                         if (jsonObject != null) {
@@ -39,7 +38,7 @@ public class Handler implements Runnable {
                             connectionHandler.handle(connectionParameter);
                         }
                     }
-                }
+             //   }
             }
         } catch (InterruptedException | IOException e) {
             System.out.println(e.getMessage());

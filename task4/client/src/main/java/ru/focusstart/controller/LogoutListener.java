@@ -1,16 +1,22 @@
 package ru.focusstart.controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import ru.focusstart.jsonobject.JSONObject;
+import ru.focusstart.message.LogoutServiceMessage;
+import ru.focusstart.message.ServiceMessage;
 import ru.focusstart.model.ChatModel;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.*;
 
-public class LogoutListener implements ActionListener {
+public class LogoutListener implements ChangeListener<Boolean> {
 
     @Override
-    public void actionPerformed(ActionEvent actionEvent) {
-        ChatModel chatClient = ChatModel.getInstance();
-        chatClient.exitFromChat();
-        chatClient.isOnline();
+    public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+        if (!t1) {
+            ChatModel chatClient = ChatModel.getInstance();
+            chatClient.sendToServer(new LogoutServiceMessage());
+            System.out.println("Отправили на сервер что вышли");
+        }
     }
 }

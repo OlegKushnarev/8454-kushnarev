@@ -3,7 +3,6 @@ package ru.focusstart.model;
 import ru.focusstart.contactlist.ContactList;
 import ru.focusstart.jsonobject.JSONObject;
 import ru.focusstart.message.Message;
-import ru.focusstart.message.NicknameRejectedServiceMessage;
 import ru.focusstart.view.window.MainWindow;
 import ru.focusstart.view.window.Window;
 
@@ -53,8 +52,10 @@ class NicknameAcceptedServiceMessageHandler implements JSONHandler {
     @Override
     public void view(JSONObject jsonObject) {
         if (jsonObject != null) {
-            ChatModel chatClient = ChatModel.getInstance();
-            chatClient.isOnline();
+            if (jsonObject instanceof Message) {
+                ChatModel chatClient = ChatModel.getInstance();
+                chatClient.isOnline();
+            }
         }
     }
 }
@@ -64,7 +65,7 @@ class NicknameRejectedServiceMessageHandler implements JSONHandler {
     @Override
     public void view(JSONObject jsonObject) {
         if (jsonObject != null) {
-            if (jsonObject instanceof NicknameRejectedServiceMessage) {
+            if (jsonObject instanceof Message) {
                 ChatModel chatClient = ChatModel.getInstance();
                 chatClient.setNickname("");
                 JOptionPane.showMessageDialog(new JFrame(),

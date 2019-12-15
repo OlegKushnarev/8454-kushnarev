@@ -23,14 +23,16 @@ public class ClientsHandler implements Runnable {
                 if (!onLineConnections.isEmpty()) {
                     for (ConnectionParameter connection :
                             onLineConnections) {
-                        BufferedReader reader = connection.getReader();
-                        if (reader != null && reader.ready()) {
+                        if (connection.isReady()) {
                             this.processConnections.put(connection);
+                            break;
                         }
                     }
+
                 }
+                Thread.sleep(100);
             }
-        } catch (InterruptedException | IOException e) {
+        } catch (InterruptedException e) {
             System.out.println(e.getMessage());
         }
     }

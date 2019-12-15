@@ -39,9 +39,7 @@ class LoginJSONObjectCreater implements JSONObjectCreater {
         Login login;
         try {
             login = this.getLogin(serializedString);
-            System.out.println(login);
         } catch (JsonProcessingException e) {
-            System.out.println(e.getMessage());
             login = null;
         }
         return login;

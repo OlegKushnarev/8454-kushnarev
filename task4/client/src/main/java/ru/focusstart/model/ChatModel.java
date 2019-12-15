@@ -69,18 +69,17 @@ public class ChatModel {
     }
 
     public void waitExit() {
-        Runtime.getRuntime().addShutdownHook(new Thread(this::closeConnection));
+        Runtime.getRuntime().addShutdownHook(new Thread(this::exitFromChat));
     }
 
     public void exitFromChat() {
         this.closeConnection();
         this.isConnect.set(false);
     }
-
+/*
     public void closeClient() {
         this.exitFromChat();
-        System.exit(0);
-    }
+    }*/
 
     public void connectToServer(Login login) throws IOException {
         Socket socket = new Socket(login.getServerAddress(), login.getPortNumber());

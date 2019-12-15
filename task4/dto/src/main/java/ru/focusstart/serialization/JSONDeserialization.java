@@ -9,14 +9,11 @@ public class JSONDeserialization {
         JSONObject jsonObject = null;
         for (JSONObjects object :
                 JSONObjects.values()) {
-            System.out.println(object);
             JSONObjectCreater creater = object.getJSONObjectCreater();
             if (creater != null) {
                 jsonObject = creater.getObjectFromJSON(serializedString);
             }
             if (jsonObject != null) {
-                System.out.println("Объект получен");
-                //System.out.println(jsonObject);
                 return jsonObject;
             }
         }

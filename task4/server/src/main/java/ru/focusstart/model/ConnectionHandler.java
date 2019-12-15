@@ -3,7 +3,10 @@ package ru.focusstart.model;
 import ru.focusstart.connection.ConnectionParameter;
 import ru.focusstart.jsonobject.JSONObject;
 import ru.focusstart.login.Login;
-import ru.focusstart.message.*;
+import ru.focusstart.message.Message;
+import ru.focusstart.message.MessageDeliveredServiceMessage;
+import ru.focusstart.message.NicknameAcceptedServiceMessage;
+import ru.focusstart.message.NicknameRejectedServiceMessage;
 
 import java.io.IOException;
 
@@ -21,17 +24,13 @@ class ConnectionRequestHandler implements ConnectionHandler {
             ServerModel chatServer = ServerModel.getInstance();
             String userNickName = login.getUserNickname();
             if (chatServer.checkNickname(userNickName)) {
-                //TODO Сформировать сервисное сообщение что логин не принят
                 chatServer.sendMessage(connectionParameter.getWriter(), new NicknameRejectedServiceMessage());
             } else {
                 connectionParameter.setNickname(userNickName);
                 connectionParameter.setJsonObject(null);
                 chatServer.addConnection(connectionParameter);
-                //TODO Сформировать сервисное сообщение что логин принят
                 chatServer.sendMessage(connectionParameter.getWriter(), new NicknameAcceptedServiceMessage());
-                //TODO Сформировать сообщение что контакт вошёл в чат
-                chatServer.sendMessageToEveryone(new Message(userNickName + " присоединился к чату"));
-                //TODO Отправить всем список контактов
+                chatServer.sendMessageToEveryone(new Message("server: ", userNickName + " присоединился к чату"));
                 chatServer.sendMessageToEveryone(chatServer.getContactList());
             }
         }
@@ -60,14 +59,12 @@ class LogoutHandler implements ConnectionHandler {
     @Override
     public void handle(ConnectionParameter connectionParameter) throws IOException {
         JSONObject jsonObject = connectionParameter.getJsonObject();
-        if (jsonObject instanceof LogoutServiceMessage) {
-            LogoutServiceMessage message = (LogoutServiceMessage) jsonObject;
-            if (!message.getText().isEmpty()) {
-                ServerModel chatServer = ServerModel.getInstance();
-                String userNickname = connectionParameter.getNickname();
-                chatServer.removeConnection(connectionParameter);
-                chatServer.sendMessageToEveryone(new Message(userNickname + " покинул чат"));
-            }
+        if (jsonObject instanceof Message) {
+            ServerModel chatServer = ServerModel.getInstance();
+            String userNickname = connectionParameter.getNickname();
+            chatServer.removeConnection(connectionParameter);
+            chatServer.sendMessageToEveryone(new Message("server: ", userNickname + " покинул чат"));
+            chatServer.sendMessageToEveryone(chatServer.getContactList());
         }
     }
 }

@@ -12,18 +12,6 @@ public class ContactList extends ArrayList<String> implements JSONObject {
     public ContactList() {
         super();
     }
-/*
-    @Override
-    public String serialize() {
-        String serializedLogin;
-        try {
-            serializedLogin = new ObjectMapper().writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            serializedLogin = "Сообщение не отправленно! Ошибка сериализации";
-        }
-
-        return serializedLogin;
-    }*/
 
     @Override
     public String getOwnName() {
