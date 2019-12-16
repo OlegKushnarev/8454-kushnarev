@@ -18,13 +18,11 @@ class MessageJSONObjectCreater implements JSONObjectCreater {
 
     @Override
     public JSONObject getObjectFromJSON(String serializedString) {
-        Message message;
         try {
-            message = this.getMessage(serializedString);
-        } catch (JsonProcessingException e) {
-            message = null;
+            return this.getMessage(serializedString);
+        } catch (JsonProcessingException ignored) {
         }
-        return message;
+        return null;
     }
 }
 
@@ -36,13 +34,11 @@ class LoginJSONObjectCreater implements JSONObjectCreater {
 
     @Override
     public JSONObject getObjectFromJSON(String serializedString) {
-        Login login;
         try {
-            login = this.getLogin(serializedString);
-        } catch (JsonProcessingException e) {
-            login = null;
+            return this.getLogin(serializedString);
+        } catch (JsonProcessingException ignored) {
         }
-        return login;
+        return null;
     }
 }
 
@@ -53,12 +49,10 @@ class ContactListJSONObjectCreater implements JSONObjectCreater {
 
     @Override
     public JSONObject getObjectFromJSON(String serializedString) {
-        ContactList contactList;
         try {
-            contactList = this.getContactList(serializedString);
-        } catch (JsonProcessingException e) {
-            contactList = null;
+            return this.getContactList(serializedString);
+        } catch (JsonProcessingException ignored) {
         }
-        return contactList;
+        return null;
     }
 }

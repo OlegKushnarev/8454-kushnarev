@@ -1,7 +1,5 @@
 package ru.focusstart.contactlist;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.focusstart.jsonobject.JSONObject;
 
 import java.util.ArrayList;

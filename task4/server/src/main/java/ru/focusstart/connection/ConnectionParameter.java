@@ -53,15 +53,8 @@ public class ConnectionParameter {
     public JSONObject getJsonObject() {
         return jsonObject;
     }
-/*
-    private synchronized String readMessage() throws IOException {
-        if (this.reader != null && this.reader.ready()) {
-            return reader.readLine();
-        }
-        return "";
-    }*/
 
-    public synchronized boolean isReady() {
+    public boolean isReady() {
         if (this.reader != null) {
             try {
                 return this.reader.ready();

@@ -9,14 +9,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.BlockingQueue;
 
-public class ClientWaiters implements Runnable {
+public class WaitingForConnection implements Runnable {
     ServerSocket serverSocket;
     BlockingQueue<ConnectionParameter> processConnections;
 
-    public ClientWaiters(ServerSocket serverSocket, BlockingQueue<ConnectionParameter> processConnections) {
+    public WaitingForConnection(ServerSocket serverSocket, BlockingQueue<ConnectionParameter> processConnections) {
         this.serverSocket = serverSocket;
         this.processConnections = processConnections;
     }

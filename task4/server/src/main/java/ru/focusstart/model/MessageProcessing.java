@@ -7,10 +7,10 @@ import ru.focusstart.serialization.JSONDeserialization;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
-public class Handler implements Runnable {
+public class MessageProcessing implements Runnable {
     BlockingQueue<ConnectionParameter> processConnections;
 
-    public Handler(BlockingQueue<ConnectionParameter> processConnections) {
+    public MessageProcessing(BlockingQueue<ConnectionParameter> processConnections) {
         this.processConnections = processConnections;
     }
 
@@ -27,18 +27,15 @@ public class Handler implements Runnable {
         try {
             while (!Thread.interrupted()) {
                 ConnectionParameter connectionParameter = this.processConnections.take();
-                //BufferedReader reader = connectionParameter.getReader();
-               // if (connectionParameter.isReady()) {
-                    String str = connectionParameter.getReader().readLine();
-                    if (str != null && !str.isEmpty()) {
-                        JSONObject jsonObject = this.getJSONObject(str);
-                        if (jsonObject != null) {
-                            connectionParameter.setJsonObject(jsonObject);
-                            ConnectionHandler connectionHandler = ConnectionHandlers.valueOf(jsonObject.getOwnName()).getConnectionHandler();
-                            connectionHandler.handle(connectionParameter);
-                        }
+                String message = connectionParameter.getReader().readLine();
+                if (message != null && !message.isEmpty()) {
+                    JSONObject jsonObject = this.getJSONObject(message);
+                    if (jsonObject != null) {
+                        connectionParameter.setJsonObject(jsonObject);
+                        ConnectionHandler connectionHandler = ConnectionHandlers.valueOf(jsonObject.getOwnName()).getConnectionHandler();
+                        connectionHandler.handle(connectionParameter);
                     }
-             //   }
+                }
             }
         } catch (InterruptedException | IOException e) {
             System.out.println(e.getMessage());

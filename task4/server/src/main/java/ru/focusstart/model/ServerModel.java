@@ -92,9 +92,9 @@ public class ServerModel {
         this.handleThread.start();*/
 
         this.executorService = Executors.newFixedThreadPool(3);
-        this.executorService.execute(new ClientWaiters(serverSocket, processConnections));
-        this.executorService.execute(new ClientsHandler(processConnections, onLineConnections));
-        this.executorService.execute(new Handler(processConnections));
+        this.executorService.execute(new WaitingForConnection(serverSocket, processConnections));
+        this.executorService.execute(new WaitingForMessage(processConnections, onLineConnections));
+        this.executorService.execute(new MessageProcessing(processConnections));
     /*
         this.waitConnection();
         this.listenToClients();

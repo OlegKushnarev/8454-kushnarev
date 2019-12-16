@@ -2,8 +2,8 @@ package ru.focusstart.model.booleanproperties;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import ru.focusstart.controller.ConnectionWindowListner;
-import ru.focusstart.controller.MainWindowListner;
 import ru.focusstart.controller.LogoutListener;
+import ru.focusstart.controller.MainWindowListener;
 
 public interface BooleanPropertiesCreater {
     SimpleBooleanProperty getBooleanProperty();
@@ -24,7 +24,7 @@ class IsConnectBooleanPropertiesCreater implements BooleanPropertiesCreater {
     @Override
     public SimpleBooleanProperty getBooleanProperty() {
         SimpleBooleanProperty simpleBooleanProperty = new SimpleBooleanProperty(false);
-        simpleBooleanProperty.addListener(new MainWindowListner());
+        simpleBooleanProperty.addListener(new MainWindowListener());
         simpleBooleanProperty.addListener(new LogoutListener());
         return simpleBooleanProperty;
     }

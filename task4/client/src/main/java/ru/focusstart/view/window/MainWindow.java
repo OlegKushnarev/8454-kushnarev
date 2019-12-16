@@ -1,6 +1,6 @@
 package ru.focusstart.view.window;
 
-import ru.focusstart.controller.CloseListener;
+import ru.focusstart.controller.MainWindowActionListener;
 import ru.focusstart.controller.MenuLogoutListener;
 import ru.focusstart.view.button.Buttons;
 import ru.focusstart.view.textarea.TextAreas;
@@ -41,7 +41,7 @@ public class MainWindow extends Window {
         JMenuItem logOut = new JMenuItem("Log out");
         logOut.addActionListener(new MenuLogoutListener());
         JMenuItem exitItem = new JMenuItem("Close");
-        exitItem.addActionListener(new CloseListener());
+        exitItem.addActionListener(new MainWindowActionListener());
 
         JMenu jMenu = new JMenu("File");
         jMenu.add(logOut);

@@ -30,7 +30,7 @@ class ConnectionRequestHandler implements ConnectionHandler {
                 connectionParameter.setJsonObject(null);
                 chatServer.addConnection(connectionParameter);
                 chatServer.sendMessage(connectionParameter.getWriter(), new NicknameAcceptedServiceMessage());
-                chatServer.sendMessageToEveryone(new Message("server", userNickName + " присоединился к чату"));
+                chatServer.sendMessageToEveryone(new Message("server", userNickName + " entered the chat"));
                 chatServer.sendMessageToEveryone(chatServer.getContactList());
             }
         }
@@ -63,7 +63,7 @@ class LogoutHandler implements ConnectionHandler {
             ServerModel chatServer = ServerModel.getInstance();
             String userNickname = connectionParameter.getNickname();
             chatServer.removeConnection(connectionParameter);
-            chatServer.sendMessageToEveryone(new Message("server: ", userNickname + " покинул чат"));
+            chatServer.sendMessageToEveryone(new Message("server: ", userNickname + " left the chat"));
             chatServer.sendMessageToEveryone(chatServer.getContactList());
         }
     }

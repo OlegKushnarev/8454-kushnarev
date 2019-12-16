@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-public class CloseListener implements ActionListener, WindowListener {
+public class MainWindowActionListener implements ActionListener, WindowListener {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {

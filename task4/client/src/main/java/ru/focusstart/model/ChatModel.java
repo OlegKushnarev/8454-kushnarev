@@ -24,6 +24,7 @@ public class ChatModel {
     private SimpleObjectProperty<JSONObject> jsonObjectSimpleObject;
     BufferedReader reader;
     PrintWriter writer;
+    Thread listenerServerThread;
 
     public static ChatModel getInstance() {
         if (instance == null) {
@@ -73,6 +74,10 @@ public class ChatModel {
             System.out.println(e.getMessage());
         } finally {
             this.listenerTreadInterrupte = true;
+            try {
+                this.listenerServerThread.join();
+            } catch (InterruptedException ignored) {
+            }
             this.nickname = "";
         }
     }
@@ -104,7 +109,7 @@ public class ChatModel {
     }
 
     public JSONObject getJSONObjectFromServer() {
-        while (true) {
+        while (this.reader != null) {
             try {
                 if (this.reader.ready()) {
                     JSONDeserialization deserialization = new JSONDeserialization();
@@ -125,7 +130,7 @@ public class ChatModel {
     }
 
     public void listenToServer() {
-        Thread ListenerServerThread = new Thread(() -> {
+        this.listenerServerThread = new Thread(() -> {
             while (!this.listenerTreadInterrupte) {
                 JSONObject jsonObject = this.getJSONObjectFromServer();
                 if (jsonObject != null) {
@@ -133,6 +138,6 @@ public class ChatModel {
                 }
             }
         });
-        ListenerServerThread.start();
+        listenerServerThread.start();
     }
 }

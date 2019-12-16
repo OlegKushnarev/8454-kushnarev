@@ -1,7 +1,6 @@
 package ru.focusstart.view.window;
 
 import javax.swing.*;
-import java.awt.*;
 
 public abstract class Window extends JFrame {
 

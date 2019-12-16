@@ -7,13 +7,11 @@ public interface JSONObject {
     String getOwnName();
 
     default String serialize() {
-        String serializeString;
         try {
-            serializeString = new ObjectMapper().writeValueAsString(this);
+            return new ObjectMapper().writeValueAsString(this);
         } catch (JsonProcessingException e) {
-            serializeString = "Сообщение не отправленно! Ошибка сериализации";
+            System.out.println(e.getMessage());
         }
-
-        return serializeString;
+        return null;
     }
 }
