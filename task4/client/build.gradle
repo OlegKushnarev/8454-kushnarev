@@ -13,5 +13,8 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    compile group: 'org.openjfx', name: 'javafx-base', version: '14-ea+6'
+
     implementation project (":task4:dto")
 }
