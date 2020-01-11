@@ -1,28 +1,10 @@
 package ru.cft.focusstart.entity;
 
-public class Product {
-    private Long id;
-    private String title;
+public class Product extends Entity {
     private Category category;
     private Manufacturer manufacturer;
     private String vendorCode;
     private String description;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public Category getCategory() {
         return category;
@@ -58,9 +40,9 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" +
-                "id = " + this.id +
-                ", title = " + this.title +
+        return this.getClass().getSimpleName() +
+                "{id = " + this.getId() +
+                ", title = " + this.getTitle() +
                 ", category = " + this.category +
                 ", manufacturer = " + this.manufacturer +
                 ", vendorCode = " + this.vendorCode +

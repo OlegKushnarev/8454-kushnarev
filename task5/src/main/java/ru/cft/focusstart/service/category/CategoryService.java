@@ -1,20 +1,10 @@
 package ru.cft.focusstart.service.category;
 
 import ru.cft.focusstart.api.dto.CategoryDto;
-import ru.cft.focusstart.api.dto.ProductDto;
+import ru.cft.focusstart.service.EntityService;
 
 import java.util.List;
 
-public interface CategoryService {
-    CategoryDto create(CategoryDto categoryDto);
-
-    CategoryDto getById(Long id);
-
-    List<CategoryDto> get(String name);
-
+public interface CategoryService extends EntityService<CategoryDto> {
     List<CategoryDto> getByManufacturerId(Long id);
-
-  //  List<BookDto> getBooks(Long id);
-
-    CategoryDto merge(Long id, CategoryDto categoryDto);
 }

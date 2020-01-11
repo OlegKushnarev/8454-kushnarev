@@ -4,23 +4,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 @JsonDeserialize(builder = CategoryDto.Builder.class)
-public class CategoryDto {
-    private final Long id;
-    private final String name;
+public class CategoryDto extends EntityDto {
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class Builder {
-
         private Long id;
-
-        private String name;
+        private String title;
 
         private Builder() {
-        }
-
-        private Builder(CategoryDto categoryDto) {
-            this.id = categoryDto.id;
-            this.name = categoryDto.name;
         }
 
         public Builder id(Long id) {
@@ -28,41 +19,28 @@ public class CategoryDto {
             return this;
         }
 
-        public Builder name(String name) {
-            this.name = name;
+        public Builder title(String title) {
+            this.title = title;
             return this;
         }
 
         public CategoryDto build() {
-            return new CategoryDto(this.id, this.name);
+            return new CategoryDto(this.id, this.title);
         }
     }
 
-    public CategoryDto(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
+    private CategoryDto(Long id, String title) {
+        super(id, title);
     }
 
     public static Builder builder() {
         return new Builder();
     }
 
-    public Builder toBuilder() {
-        return new Builder(this);
-    }
-
     @Override
     public String toString() {
         return "Category{" +
-                "id = " + this.id +
-                ", name = " + this.name + '}';
+                "id = " + this.getId() +
+                ", name = " + this.getTitle() + '}';
     }
 }

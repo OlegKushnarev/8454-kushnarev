@@ -2,10 +2,8 @@ package ru.cft.focusstart.service.category;
 
 import ru.cft.focusstart.api.dto.CategoryDto;
 import ru.cft.focusstart.entity.Category;
-import ru.cft.focusstart.entity.Manufacturer;
 import ru.cft.focusstart.exception.ObjectNotFoundException;
 import ru.cft.focusstart.mapper.CategoryMapper;
-import ru.cft.focusstart.mapper.ProductMapper;
 import ru.cft.focusstart.repository.category.CategoryRepository;
 import ru.cft.focusstart.repository.category.JdbcCategoryRepository;
 
@@ -20,8 +18,6 @@ public class DefaultCategoryService implements CategoryService {
     private final CategoryRepository categoryRepository = JdbcCategoryRepository.getInstance();
 
     private final CategoryMapper categoryMapper = CategoryMapper.getInstance();
-
-   // private final ProductMapper productMapper = ProductMapper.getInstance();
 
     private DefaultCategoryService() {
     }
@@ -49,8 +45,8 @@ public class DefaultCategoryService implements CategoryService {
     }
 
     @Override
-    public List<CategoryDto> get(String name) {
-        return categoryRepository.get(name)
+    public List<CategoryDto> get(String... varargs) {
+        return categoryRepository.get(varargs)
                 .stream()
                 .map(categoryMapper::toDto)
                 .collect(Collectors.toList());
@@ -78,13 +74,13 @@ public class DefaultCategoryService implements CategoryService {
 
     private void validate(CategoryDto categoryDto) {
         checkNull("category.id", categoryDto.getId());
-        checkSize("category.name", categoryDto.getName(), 1, 256);
+        checkSize("category.title", categoryDto.getTitle(), 1, 30);
     }
 
     private Category add(Long id, CategoryDto categoryDto) {
         Category category = new Category();
         category.setId(id);
-        category.setName(categoryDto.getName());
+        category.setTitle(categoryDto.getTitle());
 
         categoryRepository.add(category);
 
@@ -97,7 +93,7 @@ public class DefaultCategoryService implements CategoryService {
     }
 
     private Category update(Category category, CategoryDto categoryDto) {
-        category.setName(categoryDto.getName());
+        category.setTitle(categoryDto.getTitle());
 
         categoryRepository.update(category);
 

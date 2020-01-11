@@ -1,17 +1,10 @@
 package ru.cft.focusstart.service.manufacturer;
 
 import ru.cft.focusstart.api.dto.ManufacturerDto;
+import ru.cft.focusstart.service.EntityService;
 
 import java.util.List;
 
-public interface ManufacturerService {
-    ManufacturerDto create(ManufacturerDto manufacturerDto);
-
-    ManufacturerDto getById(Long id);
-
-    List<ManufacturerDto> get(String name);
-
+public interface ManufacturerService extends EntityService<ManufacturerDto> {
     List<ManufacturerDto> getByCategoryId(Long id);
-
-    ManufacturerDto merge(Long id, ManufacturerDto manufacturerDto);
 }

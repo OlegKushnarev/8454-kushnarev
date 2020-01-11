@@ -1,0 +1,528 @@
+{
+	"info": {
+		"_postman_id": "44cf3762-5264-454e-b046-074ae1c7721f",
+		"name": "Task5",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST manufacturers",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\n        \"title\": \"Rittal\"\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/task5/manufacturers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task5",
+						"manufacturers"
+					]
+				},
+				"description": "### POST /manufacturers\nСоздает нового производителя.\n#### Тело запроса\nДанные производителя за исключением идентификатора.\n#### Ответ\n[Manufacturer](#manufacturer)\n#### Ошибки\n| Код  | Комментарий |\n| --- | --- |\n| 1 | Внутренняя ошибка. |\n| 2 | Некорректные значения параметров. |\n| 3 | Сервис недоступен. |"
+			},
+			"response": []
+		},
+		{
+			"name": "GET manufacturers",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/task5/manufacturers?title=APC",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task5",
+						"manufacturers"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "APC"
+						}
+					]
+				},
+				"description": "### GET /manufacturers\nВозвращает производителей, удовлетворяющих условиям фильтра.\n#### Параметры запроса\n| Параметр | Тип данных | Обязательное | Комментарий |\n| --- | --- | --- | --- |\n| name | string | Да | Наименование производителя. |"
+			},
+			"response": []
+		},
+		{
+			"name": "GET manufacturers Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/task5/manufacturers/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task5",
+						"manufacturers",
+						"3"
+					]
+				},
+				"description": "### GET /manufacturers/{id}\nВозвращает производителя с заданным идентификатором.\n#### Ответ\n[Manufacturer](#manufacturer)\n#### Ошибки\n| Код  | Комментарий |\n| --- | --- |\n| 1 | Внутренняя ошибка. |\n| 3 | Сервис недоступен. |\n| 4 | Производитель не найден. |"
+			},
+			"response": []
+		},
+		{
+			"name": "GET manufacturers Id products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/task5/manufacturers/3/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task5",
+						"manufacturers",
+						"3",
+						"products"
+					]
+				},
+				"description": "### GET /manufacturers/{id}/products\nВозвращает все товары производителя с заданным идентификатором.\n#### Ответ\n[ [Product](#product) ]\n#### Ошибки\n| Код  | Комментарий |\n| --- | --- |\n| 1 | Внутренняя ошибка. |\n| 3 | Сервис недоступен. |\n| 4 | Производитель не найден. |"
+			},
+			"response": []
+		},
+		{
+			"name": "GET manufacturers id categories",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/task5/manufacturers/3/categories",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task5",
+						"manufacturers",
+						"3",
+						"categories"
+					]
+				},
+				"description": "### GET /manufacturers/{id}/categories\nВозвращает все категории товаров производителя с заданным идентификатором.\n\n#### Ответ\n[ [Category](#сategory) ]\n#### Ошибки\n| Код  | Комментарий |\n| --- | --- |\n| 1 | Внутренняя ошибка. |\n| 2 | Некорректные значения параметров. |\n| 4 | Производитель не найдена. |"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT manufacturers Id",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Cisco\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/task5/manufacturers/6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task5",
+						"manufacturers",
+						"6"
+					]
+				},
+				"description": "### PUT /manufacturers/{id}\nСоздает или изменяет производителя с заданным идентификатором.\n#### Тело запроса\nДанные производителя за исключением идентификатора.\n#### Ответ\n[Manufacturer](#manufacturer)\n#### Ошибки\n| Код  | Комментарий |\n| --- | --- |\n| 1 | Внутренняя ошибка. |\n| 2 | Некорректные значения параметров. |\n| 3 | Сервис недоступен. |"
+			},
+			"response": []
+		},
+		{
+			"name": "POST categories",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Комп\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/task5/categories",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task5",
+						"categories"
+					]
+				},
+				"description": "### POST /categories\nСоздает новую категорию товара.\n#### Тело запроса\nДанные категории за исключением идентификатора.\n#### Ответ\n[Category](#сategory)\n#### Ошибки\n| Код  | Комментарий |\n| --- | --- |\n| 1 | Внутренняя ошибка. |\n| 2 | Некорректные значения параметров. |\n| 3 | Сервис недоступен. |"
+			},
+			"response": []
+		},
+		{
+			"name": "GET categories",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/task5/categories?title=Предохранитель",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task5",
+						"categories"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "Предохранитель"
+						}
+					]
+				},
+				"description": "### GET /categories\nВозвращает категории товаров, удовлетворяющих условиям фильтра.\n\n#### Параметры запроса\n| Параметр | Тип данных | Обязательное | Комментарий |\n| --- | --- | --- | --- |\n| title | string | Да | Наименование категории. |"
+			},
+			"response": []
+		},
+		{
+			"name": "GET categories Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/task5/categories/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task5",
+						"categories",
+						"3"
+					]
+				},
+				"description": "### GET /categories/{id}\nВозвращает категорию с заданным идентификатором.\n\n#### Ответ\n[Category](#сategory)\n#### Ошибки\n| Код  | Комментарий |\n| --- | --- |\n| 1 | Внутренняя ошибка. |\n| 2 | Некорректные значения параметров. |\n| 4 | Категория не найдена. |"
+			},
+			"response": []
+		},
+		{
+			"name": "GET categories Id manufacturers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/task5/categories/3/manufacturers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task5",
+						"categories",
+						"3",
+						"manufacturers"
+					]
+				},
+				"description": "### GET /categories/{id}/manufacturers\nВозвращает всех производителей категории товаров с заданным идентификатором.\n#### Ответ\n[ [Manufacturer](#manufacturer) ]\n#### Ошибки\n| Код  | Комментарий |\n| --- | --- |\n| 1 | Внутренняя ошибка. |\n| 3 | Сервис недоступен. |\n| 4 | Категория не найдена. |"
+			},
+			"response": []
+		},
+		{
+			"name": "GET categories Id products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/task5/categories/4/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task5",
+						"categories",
+						"4",
+						"products"
+					]
+				},
+				"description": "### GET /categories/{id}/products\nВозвращает все товары категории с заданным идентификатором.\n#### Ответ\n[ [Manufacturer](#manufacturer) ]\n#### Ошибки\n| Код  | Комментарий |\n| --- | --- |\n| 1 | Внутренняя ошибка. |\n| 3 | Сервис недоступен. |\n| 4 | Категория не найдена. |"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT categories Id",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Коммутатор\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/task5/categories/8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task5",
+						"categories",
+						"8"
+					]
+				},
+				"description": "### PUT /categories/{id}\nСоздает или изменяет категорию с заданным идентификатором.\n#### Тело запроса\nДанные категории за исключением идентификатора.\n#### Ответ\n[Category](#сategory)\n#### Ошибки\n| Код  | Комментарий |\n| --- | --- |\n| 1 | Внутренняя ошибка. |\n| 2 | Некорректные значения параметров. |\n| 3 | Сервис недоступен. |"
+			},
+			"response": []
+		},
+		{
+			"name": "POST products",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Шкаф сетевой\",\n    \"categoryId\": 7,\n    \"manufacturerId\": 5,\n    \"vendorCode\": \"7888.510\",\n    \"description\": \"(ШxВxГ) 600x2000x800\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/task5/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task5",
+						"products"
+					]
+				},
+				"description": "### POST /products\nСоздает новый товар.\n#### Тело запроса\nДанные товара за исключением идентификатора.\n#### Ответ\n[Product](#product)\n#### Ошибки\n| Код  | Комментарий |\n| --- | --- |\n| 1 | Внутренняя ошибка. |\n| 2 | Некорректные значения параметров. |\n| 3 | Сервис недоступен. |"
+			},
+			"response": []
+		},
+		{
+			"name": "GET products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/task5/products?title=STS 2,5-TWIN&manufacturerTitle=Phoenix Contact",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task5",
+						"products"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "STS 2,5-TWIN"
+						},
+						{
+							"key": "manufacturerTitle",
+							"value": "Phoenix Contact"
+						}
+					]
+				},
+				"description": "### GET /products\nВозвращает товары, удовлетворяющие условиям фильтра.\n\n#### Параметры запроса\n| Параметр | Тип данных | Обязательное | Комментарий |\n| --- | --- | --- | --- |\n| productTitle | string | Да | Наименование товара. |\n| manufacturerTitle | string | Да | Наименование производдителя. |\n\n#### Ответ\n[ [Product](#product) ]\n#### Ошибки\n| Код  | Комментарий |\n| --- | --- |\n| 1 | Внутренняя ошибка. |\n| 2 | Некорректные значения параметров. |\n| 3 | Сервис недоступен. |"
+			},
+			"response": []
+		},
+		{
+			"name": "GET products Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/task5/products/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task5",
+						"products",
+						"2"
+					]
+				},
+				"description": "### GET /products/{id}\nВозвращает товар с заданным идентификатором.\n#### Ответ\n[Product](#product)\n#### Ошибки\n| Код  | Комментарий |\n| --- | --- |\n| 1 | Внутренняя ошибка. |\n| 3 | Сервис недоступен. |\n| 4 | Товар не найдена. |"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT products Id",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"SG350-28SFP 28-port Managed SFP Switch\",\n    \"categoryId\": 9,\n    \"manufacturerId\": 6,\n    \"vendorCode\": \"SG350-28SFP-K9-EU\",\n    \"description\": \"Коммутатор оптический\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/task5/products/7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task5",
+						"products",
+						"7"
+					]
+				},
+				"description": "### PUT /products/{id}\nСоздает или изменяет товар с заданным идентификатором.\n#### Тело запроса\nДанные товара за исключением идентификатора.\n#### Ответ\n[Product](#product)\n#### Ошибки\n| Код  | Комментарий |\n| --- | --- |\n| 1 | Внутренняя ошибка. |\n| 2 | Некорректные значения параметров. |\n| 3 | Сервис недоступен. |"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE products Id",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/task5/products/7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task5",
+						"products",
+						"7"
+					]
+				},
+				"description": "### DELETE /products/{id}\nУдаляет товар с заданным идентификатором.\n#### Ответ\n\\-\n#### Ошибки\n| Код  | Комментарий |\n| --- | --- |\n| 1 | Внутренняя ошибка. |\n| 3 | Сервис недоступен. |\n| 4 | Товар не найдена. |"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

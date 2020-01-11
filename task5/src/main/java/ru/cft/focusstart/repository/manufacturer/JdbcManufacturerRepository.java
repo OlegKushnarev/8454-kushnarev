@@ -1,32 +1,25 @@
 package ru.cft.focusstart.repository.manufacturer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.cft.focusstart.api.logging.LoggingFilter;
-import ru.cft.focusstart.entity.Category;
 import ru.cft.focusstart.entity.Manufacturer;
 import ru.cft.focusstart.repository.DataAccessException;
-import ru.cft.focusstart.repository.DataSourceProvider;
+import ru.cft.focusstart.repository.entity.JdbcEntityRepository;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 
 import static ru.cft.focusstart.repository.reader.ManufacturerReader.readManufacturer;
 
-public class JdbcManufacturerRepository implements ManufacturerRepository {
-    private static final Logger log = LoggerFactory.getLogger(LoggingFilter.class);
-
+public class JdbcManufacturerRepository extends JdbcEntityRepository implements ManufacturerRepository {
     private static final String ADD_QUERY =
-            "INSERT INTO task5.manufecture (title)" +
+            "INSERT INTO task5.manufacturer (title)" +
                     "VALUES (?)";
 
     private static final String GET_QUERY =
-            "SELECT * FROM task5.manufecture AS m";
+            "SELECT * FROM task5.manufacturer AS m";
 
     private static final String GET_BY_NAME_QUERY =
             GET_QUERY +
-                    " WHERE LOWER(m.title) LIKE LOWER(?);";
+                    " WHERE LOWER(m.title) LIKE LOWER(CONCAT( '%',?,'%'));";
 
     private static final String GET_BY_ID_QUERY =
             GET_QUERY +
@@ -34,21 +27,19 @@ public class JdbcManufacturerRepository implements ManufacturerRepository {
 
     private static final String GET_BY_CATEGORIES_ID_QUERY =
             GET_QUERY +
-                    " INNER JOIN task5.product AS p ON m.id = p.manufectureId" +
+                    " INNER JOIN task5.product AS p ON m.id = p.manufacturerId" +
                     " INNER JOIN task5.category AS c ON c.id = p.categoryId" +
                     " WHERE c.id = ?;";
 
     private static final String UPDATE_QUERY =
-            "UPDATE task5.manufecture AS m" +
+            "UPDATE task5.manufacturer AS m" +
                     " SET m.title = ?" +
                     " WHERE m.id = ?;";
 
     private static final JdbcManufacturerRepository INSTANCE = new JdbcManufacturerRepository();
 
-    private final DataSource dataSource;
-
     private JdbcManufacturerRepository() {
-        this.dataSource = DataSourceProvider.getDataSource();
+        super();
     }
 
     public static ManufacturerRepository getInstance() {
@@ -82,11 +73,8 @@ public class JdbcManufacturerRepository implements ManufacturerRepository {
                 Connection con = dataSource.getConnection();
                 PreparedStatement ps = con.prepareStatement(GET_BY_ID_QUERY)
         ) {
-
             ps.setLong(1, id);
-
             ResultSet rs = ps.executeQuery();
-
             Collection<Manufacturer> manufacturers = readManufacturersList(rs);
 
             if (manufacturers.isEmpty()) {
@@ -103,35 +91,14 @@ public class JdbcManufacturerRepository implements ManufacturerRepository {
     }
 
     @Override
-    public List<Manufacturer> get(String title) {
+    public List<Manufacturer> get(String... varargs) {
         try (
                 Connection con = dataSource.getConnection();
                 PreparedStatement ps = con.prepareStatement(GET_BY_NAME_QUERY)
         ) {
-            ps.setString(1, title == null ? "" : title);
-            log.info("Title: {}", title);
-            log.info("PreparedStatement: {}", ps.toString());
-            ResultSet rs = ps.executeQuery();
-            log.info("ResultSet: {}", rs.toString());
-            Collection<Manufacturer> manufacturers = readManufacturersList(rs);
+            ps.setString(1, varargs.length == 0 ? "" : varargs[0]);
 
-            return new ArrayList<>(manufacturers);
-        } catch (Exception e) {
-            throw new DataAccessException(e);
-        }
-    }
-
-    @Override
-    public List<Manufacturer> getByCategoryId(Long id) {
-        try (
-                Connection con = dataSource.getConnection();
-                PreparedStatement ps = con.prepareStatement(GET_BY_CATEGORIES_ID_QUERY)
-        ) {
-            ps.setLong(1, id);
-            log.info("Id: {}", id);
-            log.info("PreparedStatement: {}", ps.toString());
             ResultSet rs = ps.executeQuery();
-            log.info("ResultSet: {}", rs.toString());
             Collection<Manufacturer> manufacturers = readManufacturersList(rs);
 
             return new ArrayList<>(manufacturers);
@@ -166,8 +133,23 @@ public class JdbcManufacturerRepository implements ManufacturerRepository {
                 manufacturer = readManufacturer(rs);
                 result.put(manufacturerId, manufacturer);
             }
-            log.info("Manufacturer: {}", manufacturer);
         }
         return result.values();
+    }
+
+    @Override
+    public List<Manufacturer> getByCategoryId(Long id) {
+        try (
+                Connection con = dataSource.getConnection();
+                PreparedStatement ps = con.prepareStatement(GET_BY_CATEGORIES_ID_QUERY)
+        ) {
+            ps.setLong(1, id);
+            ResultSet rs = ps.executeQuery();
+            Collection<Manufacturer> manufacturers = readManufacturersList(rs);
+
+            return new ArrayList<>(manufacturers);
+        } catch (Exception e) {
+            throw new DataAccessException(e);
+        }
     }
 }

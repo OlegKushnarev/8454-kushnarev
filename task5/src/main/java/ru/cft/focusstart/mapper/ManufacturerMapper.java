@@ -1,7 +1,6 @@
 package ru.cft.focusstart.mapper;
 
 import ru.cft.focusstart.api.dto.ManufacturerDto;
-import ru.cft.focusstart.entity.Category;
 import ru.cft.focusstart.entity.Manufacturer;
 
 public class ManufacturerMapper {

@@ -1,19 +1,10 @@
 package ru.cft.focusstart.repository.category;
 
 import ru.cft.focusstart.entity.Category;
-import ru.cft.focusstart.entity.Product;
+import ru.cft.focusstart.repository.entity.EntityRepository;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface CategoryRepository {
-    void add(Category category);
-
-    Optional<Category> getById(Long id);
-
-    List<Category> get(String name);
-
+public interface CategoryRepository extends EntityRepository<Category> {
     List<Category> getByManufacturerId(Long id);
-
-    void update(Category category);
 }

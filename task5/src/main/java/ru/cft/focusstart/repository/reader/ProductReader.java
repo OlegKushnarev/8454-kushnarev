@@ -1,6 +1,5 @@
 package ru.cft.focusstart.repository.reader;
 
-import ru.cft.focusstart.entity.Manufacturer;
 import ru.cft.focusstart.entity.Product;
 
 import java.sql.ResultSet;
@@ -14,7 +13,7 @@ public class ProductReader {
         Product product = new Product();
         product.setId(rs.getLong("id"));
         product.setTitle(rs.getString("title"));
-        product.setVendorCode(rs.getString("productId"));
+        product.setVendorCode(rs.getString("vendorCode"));
         product.setDescription(rs.getString("description"));
 
         return product;

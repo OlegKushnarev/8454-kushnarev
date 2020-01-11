@@ -1,15 +1,11 @@
 package ru.cft.focusstart.repository.product;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.cft.focusstart.api.logging.LoggingFilter;
 import ru.cft.focusstart.entity.Category;
 import ru.cft.focusstart.entity.Manufacturer;
 import ru.cft.focusstart.entity.Product;
 import ru.cft.focusstart.repository.DataAccessException;
-import ru.cft.focusstart.repository.DataSourceProvider;
+import ru.cft.focusstart.repository.entity.JdbcEntityRepository;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,21 +16,19 @@ import static ru.cft.focusstart.repository.reader.CategoryReader.readCategory;
 import static ru.cft.focusstart.repository.reader.ManufacturerReader.readManufacturer;
 import static ru.cft.focusstart.repository.reader.ProductReader.readProduct;
 
-public class JdbcProductRepository implements ProductRepository {
-    private static final Logger log = LoggerFactory.getLogger(LoggingFilter.class);
-
+public class JdbcProductRepository extends JdbcEntityRepository implements ProductRepository {
     private static final String ADD_QUERY =
-            "INSERT INTO task5.product (title, categoryId, productId, manufectureId, description) " +
+            "INSERT INTO task5.product (title, categoryId, vendorCode, manufacturerId, description) " +
                     "VALUES (?, ?, ?, ?, ?);";
 
     private static final String GET_QUERY =
             "SELECT * FROM task5.product AS p" +
-                    " INNER JOIN task5.manufecture AS m ON m.id = p.manufectureId" +
+                    " INNER JOIN task5.manufacturer AS m ON m.id = p.manufacturerId" +
                     " INNER JOIN task5.category AS c ON c.id = p.categoryId";
 
     private static final String GET_BY_MANUFACTURERS_ID_QUERY =
             GET_QUERY +
-                    " WHERE p.manufectureId = ?;";
+                    " WHERE p.manufacturerId = ?;";
 
     private static final String GET_BY_CATEGORIES_ID_QUERY =
             GET_QUERY +
@@ -46,12 +40,12 @@ public class JdbcProductRepository implements ProductRepository {
 
     private static final String GET_BY_NAME_QUERY =
             GET_QUERY +
-                    " WHERE LOWER(p.title) LIKE LOWER(?)" +
-                    " AND LOWER(m.title) LIKE LOWER(?);";
+                    " WHERE LOWER(p.title) LIKE LOWER(CONCAT( '%',?,'%'))" +
+                    " AND LOWER(m.title) LIKE LOWER(CONCAT( '%',?,'%'));";
 
     private static final String UPDATE_QUERY =
             "UPDATE task5.product AS p " +
-                    " SET p.title = ?, p.categoryId = ?, p.productId = ?, p.manufectureId = ?, p.description = ?" +
+                    " SET p.title = ?, p.categoryId = ?, p.vendorCode = ?, p.manufacturerId = ?, p.description = ?" +
                     " WHERE p.id = ?;";
 
     private static final String DELETE_QUERY =
@@ -59,10 +53,8 @@ public class JdbcProductRepository implements ProductRepository {
 
     private static final JdbcProductRepository INSTANCE = new JdbcProductRepository();
 
-    private final DataSource dataSource;
-
     private JdbcProductRepository() {
-        this.dataSource = DataSourceProvider.getDataSource();
+        super();
     }
 
     public static JdbcProductRepository getInstance() {
@@ -121,15 +113,14 @@ public class JdbcProductRepository implements ProductRepository {
     }
 
     @Override
-    public List<Product> get(String name, String manufacturerTitle) {
+    public List<Product> get(String... varargs) {
         try (
                 Connection con = dataSource.getConnection();
                 PreparedStatement ps = con.prepareStatement(GET_BY_NAME_QUERY)
         ) {
-            ps.setString(1, name == null ? "" : name);
-            ps.setString(2, manufacturerTitle == null ? "" : manufacturerTitle);
-            log.info("Name: {}", name);
-            log.info("PreparedStatement: {}", ps.toString());
+            ps.setString(1, varargs.length == 0 ? "" : varargs[0]);
+            ps.setString(2, varargs.length < 2 ? "" : varargs[1]);
+
             ResultSet rs = ps.executeQuery();
             Collection<Product> products = readProductsList(rs);
 
@@ -141,40 +132,12 @@ public class JdbcProductRepository implements ProductRepository {
 
     @Override
     public List<Product> getByManufacturerId(Long id) {
-        try (
-                Connection con = dataSource.getConnection();
-                PreparedStatement ps = con.prepareStatement(GET_BY_MANUFACTURERS_ID_QUERY)
-        ) {
-            ps.setLong(1, id);
-            log.info("Id: {}", id);
-            log.info("PreparedStatement: {}", ps.toString());
-            ResultSet rs = ps.executeQuery();
-
-            Collection<Product> products = readProductsList(rs);
-
-            return new ArrayList<>(products);
-        } catch (Exception e) {
-            throw new DataAccessException(e);
-        }
+        return getListProduct(id, GET_BY_MANUFACTURERS_ID_QUERY);
     }
 
     @Override
     public List<Product> getByCategoryId(Long id) {
-        try (
-                Connection con = dataSource.getConnection();
-                PreparedStatement ps = con.prepareStatement(GET_BY_CATEGORIES_ID_QUERY)
-        ) {
-            ps.setLong(1, id);
-            log.info("Id: {}", id);
-            log.info("PreparedStatement: {}", ps.toString());
-            ResultSet rs = ps.executeQuery();
-
-            Collection<Product> products = readProductsList(rs);
-
-            return new ArrayList<>(products);
-        } catch (Exception e) {
-            throw new DataAccessException(e);
-        }
+        return getListProduct(id, GET_BY_CATEGORIES_ID_QUERY);
     }
 
     @Override
@@ -214,22 +177,32 @@ public class JdbcProductRepository implements ProductRepository {
         List<Product> result = new ArrayList<>();
         while (rs.next()) {
             Product product = readProduct(rs);
-            log.info("Product: {}", product);
 
             Category category = readCategory(rs);
             product.setCategory(category);
 
-            log.info("Category: {}", category);
-
             Manufacturer manufacturer = readManufacturer(rs);
             product.setManufacturer(manufacturer);
-
-            log.info("Manufacturer: {}", manufacturer);
-
-            log.info("Product: {}", product);
 
             result.add(product);
         }
         return result;
+    }
+
+    private List<Product> getListProduct(Long id, String query) {
+        try (
+                Connection con = dataSource.getConnection();
+                PreparedStatement ps = con.prepareStatement(query)
+        ) {
+            ps.setLong(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            Collection<Product> products = readProductsList(rs);
+
+            return new ArrayList<>(products);
+        } catch (Exception e) {
+            throw new DataAccessException(e);
+        }
     }
 }

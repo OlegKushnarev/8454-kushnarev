@@ -1,28 +1,17 @@
 package ru.cft.focusstart.repository.category;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.cft.focusstart.api.logging.LoggingFilter;
 import ru.cft.focusstart.entity.Category;
-
-import javax.sql.DataSource;
-
-import ru.cft.focusstart.entity.Manufacturer;
-import ru.cft.focusstart.entity.Product;
 import ru.cft.focusstart.repository.DataAccessException;
-import ru.cft.focusstart.repository.DataSourceProvider;
+import ru.cft.focusstart.repository.entity.JdbcEntityRepository;
 
 import java.sql.*;
 import java.util.*;
 
 import static ru.cft.focusstart.repository.reader.CategoryReader.readCategory;
-import static ru.cft.focusstart.repository.reader.ProductReader.readProduct;
 
-public class JdbcCategoryRepository implements CategoryRepository {
-    private static final Logger log = LoggerFactory.getLogger(LoggingFilter.class);
-
+public class JdbcCategoryRepository extends JdbcEntityRepository implements CategoryRepository {
     private static final String ADD_QUERY =
-            "INSERT INTO task5.category (name) " +
+            "INSERT INTO task5.category (title) " +
                     "values (?);";
 
     private static final String GET_QUERY =
@@ -31,12 +20,12 @@ public class JdbcCategoryRepository implements CategoryRepository {
     private static final String GET_BY_MANUFACTURERS_ID_QUERY =
             GET_QUERY +
                     " INNER JOIN task5.product AS p ON c.id = p.categoryId" +
-                    " INNER JOIN task5.manufecture AS m ON m.id = p.manufectureId" +
+                    " INNER JOIN task5.manufacturer AS m ON m.id = p.manufacturerId" +
                     " WHERE m.id = ?;";
 
     private static final String GET_BY_NAME_QUERY =
             GET_QUERY +
-                    " WHERE LOWER(c.name) LIKE LOWER(?)";
+                    " WHERE LOWER(c.title) LIKE LOWER(CONCAT( '%',?,'%'))";
 
     private static final String GET_BY_ID_QUERY =
             GET_QUERY +
@@ -44,16 +33,14 @@ public class JdbcCategoryRepository implements CategoryRepository {
 
     private static final String UPDATE_QUERY =
             "UPDATE task5.category AS c" +
-                    " SET c.name = ?" +
+                    " SET c.title = ?" +
                     " WHERE c.id = ?;";
 
 
     private static final JdbcCategoryRepository INSTANCE = new JdbcCategoryRepository();
 
-    private final DataSource dataSource;
-
     private JdbcCategoryRepository() {
-        this.dataSource = DataSourceProvider.getDataSource();
+        super();
     }
 
     public static CategoryRepository getInstance() {
@@ -66,7 +53,7 @@ public class JdbcCategoryRepository implements CategoryRepository {
                 Connection con = dataSource.getConnection();
                 PreparedStatement ps = con.prepareStatement(ADD_QUERY, Statement.RETURN_GENERATED_KEYS)
         ) {
-            ps.setString(1, category.getName());
+            ps.setString(1, category.getTitle());
 
             ps.executeUpdate();
 
@@ -91,7 +78,6 @@ public class JdbcCategoryRepository implements CategoryRepository {
             ps.setLong(1, id);
 
             ResultSet rs = ps.executeQuery();
-
             Collection<Category> categories = readCategoriesList(rs);
 
             if (categories.isEmpty()) {
@@ -108,16 +94,14 @@ public class JdbcCategoryRepository implements CategoryRepository {
     }
 
     @Override
-    public List<Category> get(String name) {
+    public List<Category> get(String... varargs) {
         try (
                 Connection con = dataSource.getConnection();
                 PreparedStatement ps = con.prepareStatement(GET_BY_NAME_QUERY)
         ) {
-            ps.setString(1, name == null ? "" : name);
-            log.info("Name: {}", name);
-            log.info("PreparedStatement: {}", ps.toString());
+            ps.setString(1, varargs.length == 0 ? "" : varargs[0]);
+
             ResultSet rs = ps.executeQuery();
-            log.info("ResultSet: {}", rs.toString());
             Collection<Category> categories = readCategoriesList(rs);
 
             return new ArrayList<>(categories);
@@ -133,10 +117,8 @@ public class JdbcCategoryRepository implements CategoryRepository {
                 PreparedStatement ps = con.prepareStatement(GET_BY_MANUFACTURERS_ID_QUERY)
         ) {
             ps.setLong(1, id);
-            log.info("Id: {}", id);
-            log.info("PreparedStatement: {}", ps.toString());
+
             ResultSet rs = ps.executeQuery();
-            log.info("ResultSet: {}", rs.toString());
             Collection<Category> categories = readCategoriesList(rs);
 
             return new ArrayList<>(categories);
@@ -151,7 +133,7 @@ public class JdbcCategoryRepository implements CategoryRepository {
                 Connection con = dataSource.getConnection();
                 PreparedStatement ps = con.prepareStatement(UPDATE_QUERY)
         ) {
-            ps.setString(1, category.getName());
+            ps.setString(1, category.getTitle());
             ps.setLong(2, category.getId());
 
             ps.executeUpdate();
@@ -170,7 +152,6 @@ public class JdbcCategoryRepository implements CategoryRepository {
                 category = readCategory(rs);
                 result.put(categoryId, category);
             }
-            log.info("Category: {}", category);
         }
         return result.values();
     }

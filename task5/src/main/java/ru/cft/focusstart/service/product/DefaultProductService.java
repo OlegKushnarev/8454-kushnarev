@@ -40,24 +40,20 @@ public class DefaultProductService implements ProductService {
     @Override
     public ProductDto create(ProductDto productDto) {
         validate(productDto);
-
         Product product = add(null, productDto);
-
         return productMapper.toDto(product);
     }
 
     @Override
     public ProductDto getById(Long id) {
         checkNotNull("id", id);
-
         Product product = getProduct(id);
-
         return productMapper.toDto(product);
     }
 
     @Override
-    public List<ProductDto> get(String name, String manufacturerTitle) {
-        return productRepository.get(name, manufacturerTitle)
+    public List<ProductDto> get(String... varargs) {
+        return productRepository.get(varargs)
                 .stream()
                 .map(productMapper::toDto)
                 .collect(Collectors.toList());
@@ -94,19 +90,17 @@ public class DefaultProductService implements ProductService {
     @Override
     public void delete(Long id) {
         checkNotNull("id", id);
-
         Product product = getProduct(id);
-
         productRepository.delete(product);
     }
 
     private void validate(ProductDto productDto) {
         checkNull("product.id", productDto.getId());
-        checkSize("product.title", productDto.getTitle(), 1, 256);
+        checkSize("product.title", productDto.getTitle(), 1, 50);
         checkNotNull("product.categoryId", productDto.getCategoryId());
-        checkSize("product.vendorCode", productDto.getVendorCode(), 1, 64);
+        checkSize("product.vendorCode", productDto.getVendorCode(), 1, 50);
         checkNotNull("product.manufacturerId", productDto.getManufacturerId());
-        checkSize("product.description", productDto.getDescription(), 1, 4096);
+        checkSize("product.description", productDto.getDescription(), 1, 100);
     }
 
     private Product add(Long id, ProductDto productDto) {

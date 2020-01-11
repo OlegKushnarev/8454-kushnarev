@@ -11,8 +11,8 @@ public class ManufacturerReader {
 
     public static Manufacturer readManufacturer(ResultSet rs) throws SQLException {
         Manufacturer manufacturer = new Manufacturer();
-        manufacturer.setId(rs.getLong("manufecture.id"));
-        manufacturer.setTitle(rs.getString("manufecture.title"));
+        manufacturer.setId(rs.getLong("manufacturer.id"));
+        manufacturer.setTitle(rs.getString("manufacturer.title"));
 
         return manufacturer;
     }

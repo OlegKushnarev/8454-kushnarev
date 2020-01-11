@@ -4,7 +4,6 @@ import ru.cft.focusstart.api.dto.ManufacturerDto;
 import ru.cft.focusstart.entity.Manufacturer;
 import ru.cft.focusstart.exception.ObjectNotFoundException;
 import ru.cft.focusstart.mapper.ManufacturerMapper;
-import ru.cft.focusstart.mapper.ProductMapper;
 import ru.cft.focusstart.repository.manufacturer.JdbcManufacturerRepository;
 import ru.cft.focusstart.repository.manufacturer.ManufacturerRepository;
 
@@ -20,8 +19,6 @@ public class DefaultManufacturerService implements ManufacturerService {
 
     private final ManufacturerMapper manufacturerMapper = ManufacturerMapper.getInstance();
 
-    private final ProductMapper productMapper = ProductMapper.getInstance();
-
     private DefaultManufacturerService() {
     }
 
@@ -32,24 +29,20 @@ public class DefaultManufacturerService implements ManufacturerService {
     @Override
     public ManufacturerDto create(ManufacturerDto manufacturerDto) {
         validate(manufacturerDto);
-
         Manufacturer manufacturer = add(null, manufacturerDto);
-
         return manufacturerMapper.toDto(manufacturer);
     }
 
     @Override
     public ManufacturerDto getById(Long id) {
         checkNotNull("id", id);
-
         Manufacturer manufacturer = getManufacturer(id);
-
         return manufacturerMapper.toDto(manufacturer);
     }
 
     @Override
-    public List<ManufacturerDto> get(String name) {
-        return manufacturerRepository.get(name)
+    public List<ManufacturerDto> get(String... varargs) {
+        return manufacturerRepository.get(varargs)
                 .stream()
                 .map(manufacturerMapper::toDto)
                 .collect(Collectors.toList());
@@ -77,16 +70,14 @@ public class DefaultManufacturerService implements ManufacturerService {
 
     private void validate(ManufacturerDto manufacturerDto) {
         checkNull("manufacturer.id", manufacturerDto.getId());
-        checkSize("manufacturer.title", manufacturerDto.getTitle(), 1, 256);
+        checkSize("manufacturer.title", manufacturerDto.getTitle(), 1, 50);
     }
 
     private Manufacturer add(Long id, ManufacturerDto manufacturerDto) {
         Manufacturer manufacturer = new Manufacturer();
         manufacturer.setId(id);
         manufacturer.setTitle(manufacturerDto.getTitle());
-
         manufacturerRepository.add(manufacturer);
-
         return manufacturer;
     }
 
@@ -97,9 +88,7 @@ public class DefaultManufacturerService implements ManufacturerService {
 
     private Manufacturer update(Manufacturer manufacturer, ManufacturerDto manufacturerDto) {
         manufacturer.setTitle(manufacturerDto.getTitle());
-
         manufacturerRepository.update(manufacturer);
-
         return manufacturer;
     }
 }

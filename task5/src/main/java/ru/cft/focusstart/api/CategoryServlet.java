@@ -1,21 +1,10 @@
 package ru.cft.focusstart.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.cft.focusstart.api.dto.CategoryDto;
 import ru.cft.focusstart.api.dto.ManufacturerDto;
 import ru.cft.focusstart.api.dto.ProductDto;
-import ru.cft.focusstart.api.logging.LoggingFilter;
-import ru.cft.focusstart.service.category.CategoryService;
-import ru.cft.focusstart.service.category.DefaultCategoryService;
-import ru.cft.focusstart.service.manufacturer.DefaultManufacturerService;
-import ru.cft.focusstart.service.manufacturer.ManufacturerService;
-import ru.cft.focusstart.service.product.DefaultProductService;
-import ru.cft.focusstart.service.product.ProductService;
 
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,115 +13,59 @@ import java.util.List;
 import static ru.cft.focusstart.api.PathParser.getPathPart;
 
 @WebServlet(urlPatterns = "/categories/*")
-public class CategoryServlet extends HttpServlet {
-    private static final Logger log = LoggerFactory.getLogger(LoggingFilter.class);
+public class CategoryServlet extends EntityServlet {
 
     private static final String CATEGORIES_PATTERN = "^/categories$";
     private static final String CATEGORY_PATTERN = "^/categories/(?<id>[0-9]+)$";
     private static final String CATEGORY_MANUFACTURERS_PATTERN = "^/categories/(?<id>[0-9]+)/manufacturers$";
     private static final String CATEGORY_PRODUCTS_PATTERN = "^/categories/(?<id>[0-9]+)/products$";
 
-    private final ObjectMapper mapper = new ObjectMapper();
-
-    private final ExceptionHandler exceptionHandler = ExceptionHandler.getInstance();
-
-    private final CategoryService categoryService = DefaultCategoryService.getInstance();
-
-    private final ProductService productService = DefaultProductService.getInstance();
-
-    private final ManufacturerService manufacturerService = DefaultManufacturerService.getInstance();
-
-
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        try {
-            String path = getPath(req);
-            if (path.matches(CATEGORIES_PATTERN)) {
-                get(req, resp);
-            } else if (path.matches(CATEGORY_PATTERN)) {
-                getById(req, resp);
-            } else if (path.matches(CATEGORY_MANUFACTURERS_PATTERN)) {
-                getManufacturers(req, resp);
+    protected Operation getOperation(String methodName, String path) {
+        Operation operation = super.getOperation(methodName, path);
+
+        if (operation == null) {
+            if (path.matches(CATEGORY_MANUFACTURERS_PATTERN)) {
+                operation = this::getManufacturers;
             } else if (path.matches(CATEGORY_PRODUCTS_PATTERN)) {
-                getProducts(req, resp);
-            } else {
-                resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+                operation = this::getProducts;
             }
-        } catch (Exception e) {
-            exceptionHandler.handleExceptions(e, resp);
         }
+        return operation;
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        try {
-            String path = getPath(req);
-            if (path.matches(CATEGORIES_PATTERN)) {
-                create(req, resp);
-            } else {
-                resp.sendError(HttpServletResponse.SC_NOT_FOUND);
-            }
-        } catch (Exception e) {
-            exceptionHandler.handleExceptions(e, resp);
-        }
+    protected String getPattern() {
+        return CATEGORIES_PATTERN;
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        try {
-            String path = getPath(req);
-            if (path.matches(CATEGORY_PATTERN)) {
-                merge(req, resp);
-            } else {
-                resp.sendError(HttpServletResponse.SC_NOT_FOUND);
-            }
-        } catch (Exception e) {
-            exceptionHandler.handleExceptions(e, resp);
-        }
+    protected String getByIdPattern() {
+        return CATEGORY_PATTERN;
     }
 
-    private void get(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String name = req.getParameter("name");
-
-        List<CategoryDto> response = categoryService.get(name);
+    @Override
+    protected void get(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String title = req.getParameter("title");
+        List<CategoryDto> response = categoryService.get(title);
         writeResp(resp, response);
     }
 
-    private void getManufacturers(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Long id = getPathPart(getPath(req), CATEGORY_MANUFACTURERS_PATTERN, "id");
-        log.info("Id: {}", id);
-
-        List<ManufacturerDto> response = manufacturerService.getByCategoryId(id);
+    @Override
+    protected void getById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        CategoryDto response = getCategoryDto(req, CATEGORY_PATTERN);
         writeResp(resp, response);
     }
 
-    private void getProducts(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Long id = getPathPart(getPath(req), CATEGORY_PRODUCTS_PATTERN, "id");
-        log.info("Id: {}", id);
-
-        List<ProductDto> response = productService.getByCategoryId(id);
-        writeResp(resp, response);
-    }
-
-    private void getById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Long id = getPathPart(getPath(req), CATEGORY_PATTERN, "id");
-
-        CategoryDto response = categoryService.getById(id);
-        writeResp(resp, response);
-    }
-
-    private void create(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    @Override
+    protected void create(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         CategoryDto request = mapper.readValue(req.getInputStream(), CategoryDto.class);
-
         CategoryDto response = categoryService.create(request);
         writeResp(resp, response);
     }
 
-    private String getPath(HttpServletRequest req) {
-        return req.getRequestURI().substring(req.getContextPath().length());
-    }
-
-    private void merge(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    @Override
+    protected void merge(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Long id = getPathPart(getPath(req), CATEGORY_PATTERN, "id");
         CategoryDto request = mapper.readValue(req.getInputStream(), CategoryDto.class);
 
@@ -140,8 +73,25 @@ public class CategoryServlet extends HttpServlet {
         writeResp(resp, response);
     }
 
-    private void writeResp(HttpServletResponse resp, Object response) throws IOException {
-        resp.setContentType("application/json");
-        mapper.writeValue(resp.getOutputStream(), response);
+    @Override
+    protected void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+    }
+
+    private void getManufacturers(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        CategoryDto categoryDto = getCategoryDto(req, CATEGORY_MANUFACTURERS_PATTERN);
+        List<ManufacturerDto> response = manufacturerService.getByCategoryId(categoryDto.getId());
+        writeResp(resp, response);
+    }
+
+    private void getProducts(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        CategoryDto categoryDto = getCategoryDto(req, CATEGORY_PRODUCTS_PATTERN);
+        List<ProductDto> response = productService.getByCategoryId(categoryDto.getId());
+        writeResp(resp, response);
+    }
+
+    private CategoryDto getCategoryDto(HttpServletRequest req, String pattern) {
+        Long id = getPathPart(getPath(req), pattern, "id");
+        return categoryService.getById(id);
     }
 }

@@ -6,9 +6,9 @@ import ru.cft.focusstart.entity.Category;
 import ru.cft.focusstart.entity.Manufacturer;
 
 @JsonDeserialize(builder = ProductDto.Builder.class)
-public class ProductDto {
-    private final Long id;
-    private final String title;
+public class ProductDto extends EntityDto {
+/*    private final Long id;
+    private final String title;*/
     private final Long categoryId;
     private final Long manufacturerId;
     private final String vendorCode;
@@ -26,16 +26,15 @@ public class ProductDto {
 
         private Builder() {
         }
-
+/*
         private Builder(ProductDto productDto) {
-            this.id = productDto.id;
-            this.title = productDto.title;
+            super(productDto);
             this.categoryId = productDto.categoryId;
             this.manufacturerId = productDto.manufacturerId;
             this.vendorCode = productDto.vendorCode;
             this.description = productDto.description;
         }
-
+*/
         public Builder id(Long id) {
             this.id = id;
             return this;
@@ -72,8 +71,7 @@ public class ProductDto {
     }
 
     private ProductDto(Long id, String title, Long categoryId, Long manufacturerId, String vendorCode, String description) {
-        this.id = id;
-        this.title = title;
+        super(id, title);
         this.categoryId = categoryId;
         this.manufacturerId = manufacturerId;
         this.vendorCode = vendorCode;
@@ -83,7 +81,7 @@ public class ProductDto {
     public static Builder builder() {
         return new Builder();
     }
-
+/*
     public Builder toBuilder() {
         return new Builder(this);
     }
@@ -94,7 +92,7 @@ public class ProductDto {
 
     public String getTitle() {
         return title;
-    }
+    }*/
 
     public Long getCategoryId() {
         return categoryId;
@@ -115,8 +113,8 @@ public class ProductDto {
     @Override
     public String toString() {
         return "Product{" +
-                "id = " + this.id +
-                ", title = " + this.title +
+                "id = " + this.getId() +
+                ", title = " + this.getTitle() +
                 ", category = " + this.categoryId +
                 ", manufacturer = " + this.manufacturerId +
                 ", vendorCode = " + this.vendorCode +

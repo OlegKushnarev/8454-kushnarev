@@ -12,7 +12,7 @@ public class CategoryReader {
     public static Category readCategory(ResultSet rs) throws SQLException {
         Category category = new Category();
         category.setId(rs.getLong("category.id"));
-        category.setName(rs.getString("category.name"));
+        category.setTitle(rs.getString("category.title"));
 
         return category;
     }
