@@ -94,12 +94,12 @@ public class JdbcCategoryRepository extends JdbcEntityRepository implements Cate
     }
 
     @Override
-    public List<Category> get(String... varargs) {
+    public List<Category> get(String categoryTitle) {
         try (
                 Connection con = dataSource.getConnection();
                 PreparedStatement ps = con.prepareStatement(GET_BY_NAME_QUERY)
         ) {
-            ps.setString(1, varargs.length == 0 ? "" : varargs[0]);
+            ps.setString(1, categoryTitle == null ? "" : categoryTitle);
 
             ResultSet rs = ps.executeQuery();
             Collection<Category> categories = readCategoriesList(rs);

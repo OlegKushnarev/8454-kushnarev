@@ -16,12 +16,12 @@ public class ProductServlet extends EntityServlet {
     private static final String PRODUCT_PATTERN = "^/products/(?<id>[0-9]+)$";
 
     @Override
-    protected String getPattern() {
+    protected String entityPathPattern() {
         return PRODUCTS_PATTERN;
     }
 
     @Override
-    protected String getByIdPattern() {
+    protected String entityByIdPathPattern() {
         return PRODUCT_PATTERN;
     }
 

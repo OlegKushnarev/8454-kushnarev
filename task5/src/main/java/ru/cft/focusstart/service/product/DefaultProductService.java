@@ -52,8 +52,8 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public List<ProductDto> get(String... varargs) {
-        return productRepository.get(varargs)
+    public List<ProductDto> get(String productTitle, String manufacturerTitle) {
+        return productRepository.get(productTitle, manufacturerTitle)
                 .stream()
                 .map(productMapper::toDto)
                 .collect(Collectors.toList());

@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 @JsonDeserialize(builder = ManufacturerDto.Builder.class)
 public class ManufacturerDto extends EntityDto {
-/*    private final Long id;
-    private final String title;*/
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class Builder {
@@ -15,12 +13,7 @@ public class ManufacturerDto extends EntityDto {
 
         private Builder() {
         }
-/*
-        private Builder(ManufacturerDto manufacturerDto) {
-            this.id = manufacturerDto.getId();
-            this.title = manufacturerDto.getTitle();
-        }
-*/
+
         public Builder id(Long id) {
             this.id = id;
             return this;
@@ -39,22 +32,10 @@ public class ManufacturerDto extends EntityDto {
     private ManufacturerDto(Long id, String title) {
         super(id, title);
     }
-/*
-    public Long getId() {
-        return id;
-    }
 
-    public String getTitle() {
-        return title;
-    }
-*/
     public static Builder builder() {
         return new Builder();
     }
-
-/*    public Builder toBuilder() {
-        return new Builder(this);
-    }*/
 
     @Override
     public String toString() {

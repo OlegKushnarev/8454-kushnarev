@@ -45,8 +45,8 @@ public class DefaultCategoryService implements CategoryService {
     }
 
     @Override
-    public List<CategoryDto> get(String... varargs) {
-        return categoryRepository.get(varargs)
+    public List<CategoryDto> get(String categoryTitle) {
+        return categoryRepository.get(categoryTitle)
                 .stream()
                 .map(categoryMapper::toDto)
                 .collect(Collectors.toList());

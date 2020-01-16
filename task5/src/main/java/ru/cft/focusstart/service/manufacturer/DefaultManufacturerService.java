@@ -41,8 +41,8 @@ public class DefaultManufacturerService implements ManufacturerService {
     }
 
     @Override
-    public List<ManufacturerDto> get(String... varargs) {
-        return manufacturerRepository.get(varargs)
+    public List<ManufacturerDto> get(String manufacturerTitle) {
+        return manufacturerRepository.get(manufacturerTitle)
                 .stream()
                 .map(manufacturerMapper::toDto)
                 .collect(Collectors.toList());

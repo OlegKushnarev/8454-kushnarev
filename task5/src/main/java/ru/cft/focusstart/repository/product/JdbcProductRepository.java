@@ -44,7 +44,7 @@ public class JdbcProductRepository extends JdbcEntityRepository implements Produ
                     " AND LOWER(m.title) LIKE LOWER(CONCAT( '%',?,'%'));";
 
     private static final String UPDATE_QUERY =
-            "UPDATE task5.product AS p " +
+            "UPDATE task5.product AS p" +
                     " SET p.title = ?, p.categoryId = ?, p.vendorCode = ?, p.manufacturerId = ?, p.description = ?" +
                     " WHERE p.id = ?;";
 
@@ -113,13 +113,13 @@ public class JdbcProductRepository extends JdbcEntityRepository implements Produ
     }
 
     @Override
-    public List<Product> get(String... varargs) {
+    public List<Product> get(String productTitle, String manufacturerTitle) {
         try (
                 Connection con = dataSource.getConnection();
                 PreparedStatement ps = con.prepareStatement(GET_BY_NAME_QUERY)
         ) {
-            ps.setString(1, varargs.length == 0 ? "" : varargs[0]);
-            ps.setString(2, varargs.length < 2 ? "" : varargs[1]);
+            ps.setString(1, productTitle == null ? "" : productTitle);
+            ps.setString(2, manufacturerTitle == null ? "" : manufacturerTitle);
 
             ResultSet rs = ps.executeQuery();
             Collection<Product> products = readProductsList(rs);

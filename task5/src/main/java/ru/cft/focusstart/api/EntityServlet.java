@@ -33,9 +33,9 @@ public abstract class EntityServlet extends HttpServlet {
         mapper.writeValue(resp.getOutputStream(), response);
     }
 
-    abstract protected String getPattern();
+    abstract protected String entityPathPattern();
 
-    abstract protected String getByIdPattern();
+    abstract protected String entityByIdPathPattern();
 
     abstract protected void get(HttpServletRequest req, HttpServletResponse resp) throws IOException;
 
@@ -48,28 +48,30 @@ public abstract class EntityServlet extends HttpServlet {
     abstract protected void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException;
 
     protected Operation getOperation(String methodName, String path) {
-        if (path.matches(getPattern())) {
-            if (methodName.matches("doGet")) {
+        if (path.matches(entityPathPattern())) {
+            if (methodName.matches("GET")) {
                 return this::get;
             }
-            return this::create;
-        } else if (path.matches(getByIdPattern())) {
-            if (methodName.matches("doGet")) {
+            if (methodName.matches("POST")) {
+                return this::create;
+            }
+        } else if (path.matches(entityByIdPathPattern())) {
+            if (methodName.matches("GET")) {
                 return this::getById;
             }
-            if (methodName.matches("doDelete")) {
+            if (methodName.matches("DELETE")) {
                 return this::delete;
             }
-            return this::merge;
+            if (methodName.matches("PUT")) {
+                return this::merge;
+            }
         }
         return null;
     }
 
     private void doMethod(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
-            String path = getPath(req);
-            StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-            Operation operation = getOperation(stackTraceElements[2].getMethodName(), path);
+            Operation operation = getOperation(req.getMethod(), getPath(req));
             if (operation != null) {
                 operation.getResult(req, resp);
             } else {

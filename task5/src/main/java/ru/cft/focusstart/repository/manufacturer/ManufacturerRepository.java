@@ -6,5 +6,7 @@ import ru.cft.focusstart.repository.entity.EntityRepository;
 import java.util.List;
 
 public interface ManufacturerRepository extends EntityRepository<Manufacturer> {
+    List<Manufacturer> get(String manufacturerTitle);
+
     List<Manufacturer> getByCategoryId(Long id);
 }

@@ -91,12 +91,12 @@ public class JdbcManufacturerRepository extends JdbcEntityRepository implements 
     }
 
     @Override
-    public List<Manufacturer> get(String... varargs) {
+    public List<Manufacturer> get(String manufacturerTitle) {
         try (
                 Connection con = dataSource.getConnection();
                 PreparedStatement ps = con.prepareStatement(GET_BY_NAME_QUERY)
         ) {
-            ps.setString(1, varargs.length == 0 ? "" : varargs[0]);
+            ps.setString(1, manufacturerTitle == null ? "" : manufacturerTitle);
 
             ResultSet rs = ps.executeQuery();
             Collection<Manufacturer> manufacturers = readManufacturersList(rs);

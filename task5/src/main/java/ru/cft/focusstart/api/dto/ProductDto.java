@@ -2,13 +2,9 @@ package ru.cft.focusstart.api.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import ru.cft.focusstart.entity.Category;
-import ru.cft.focusstart.entity.Manufacturer;
 
 @JsonDeserialize(builder = ProductDto.Builder.class)
 public class ProductDto extends EntityDto {
-/*    private final Long id;
-    private final String title;*/
     private final Long categoryId;
     private final Long manufacturerId;
     private final String vendorCode;
@@ -26,15 +22,7 @@ public class ProductDto extends EntityDto {
 
         private Builder() {
         }
-/*
-        private Builder(ProductDto productDto) {
-            super(productDto);
-            this.categoryId = productDto.categoryId;
-            this.manufacturerId = productDto.manufacturerId;
-            this.vendorCode = productDto.vendorCode;
-            this.description = productDto.description;
-        }
-*/
+
         public Builder id(Long id) {
             this.id = id;
             return this;
@@ -81,18 +69,6 @@ public class ProductDto extends EntityDto {
     public static Builder builder() {
         return new Builder();
     }
-/*
-    public Builder toBuilder() {
-        return new Builder(this);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }*/
 
     public Long getCategoryId() {
         return categoryId;

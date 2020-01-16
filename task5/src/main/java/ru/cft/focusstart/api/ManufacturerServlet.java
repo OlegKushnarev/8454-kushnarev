@@ -25,22 +25,24 @@ public class ManufacturerServlet extends EntityServlet {
         Operation operation = super.getOperation(methodName, path);
 
         if (operation == null) {
-            if (path.matches(MANUFACTURER_PRODUCTS_PATTERN)) {
-                operation = this::getProducts;
-            } else if (path.matches(MANUFACTURER_CATEGORIES_PATTERN)) {
-                operation = this::getCategories;
+            if (methodName.matches("GET")) {
+                if (path.matches(MANUFACTURER_PRODUCTS_PATTERN)) {
+                    operation = this::getProducts;
+                } else if (path.matches(MANUFACTURER_CATEGORIES_PATTERN)) {
+                    operation = this::getCategories;
+                }
             }
         }
         return operation;
     }
 
     @Override
-    protected String getPattern() {
+    protected String entityPathPattern() {
         return MANUFACTURERS_PATTERN;
     }
 
     @Override
-    protected String getByIdPattern() {
+    protected String entityByIdPathPattern() {
         return MANUFACTURER_PATTERN;
     }
 
@@ -74,7 +76,7 @@ public class ManufacturerServlet extends EntityServlet {
 
     @Override
     protected void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
+        resp.sendError(HttpServletResponse.SC_NOT_FOUND);
     }
 
     private void getProducts(HttpServletRequest req, HttpServletResponse resp) throws IOException {

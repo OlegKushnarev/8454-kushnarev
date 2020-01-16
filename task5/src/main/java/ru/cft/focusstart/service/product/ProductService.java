@@ -6,6 +6,8 @@ import ru.cft.focusstart.service.EntityService;
 import java.util.List;
 
 public interface ProductService extends EntityService<ProductDto> {
+    List<ProductDto> get(String productTitle, String manufacturerTitle);
+
     List<ProductDto> getByManufacturerId(Long id);
 
     List<ProductDto> getByCategoryId(Long id);
