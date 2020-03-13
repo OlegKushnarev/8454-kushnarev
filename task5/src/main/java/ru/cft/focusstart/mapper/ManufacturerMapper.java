@@ -1,17 +1,11 @@
 package ru.cft.focusstart.mapper;
 
+import org.springframework.stereotype.Component;
 import ru.cft.focusstart.api.dto.ManufacturerDto;
 import ru.cft.focusstart.entity.Manufacturer;
 
+@Component
 public class ManufacturerMapper {
-    private static final ManufacturerMapper INSTANCE = new ManufacturerMapper();
-
-    private ManufacturerMapper() {
-    }
-
-    public static ManufacturerMapper getInstance() {
-        return INSTANCE;
-    }
 
     public ManufacturerDto toDto(Manufacturer manufacturer) {
         return ManufacturerDto.builder()

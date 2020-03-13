@@ -1,17 +1,11 @@
 package ru.cft.focusstart.mapper;
 
+import org.springframework.stereotype.Component;
 import ru.cft.focusstart.api.dto.ProductDto;
 import ru.cft.focusstart.entity.Product;
 
+@Component
 public class ProductMapper {
-    private static final ProductMapper INSTANCE = new ProductMapper();
-
-    private ProductMapper() {
-    }
-
-    public static ProductMapper getInstance() {
-        return INSTANCE;
-    }
 
     public ProductDto toDto(Product product) {
         return ProductDto.builder()

@@ -1,14 +1,17 @@
 package ru.cft.focusstart.repository.category;
 
+import org.springframework.stereotype.Repository;
 import ru.cft.focusstart.entity.Category;
 import ru.cft.focusstart.repository.DataAccessException;
 import ru.cft.focusstart.repository.entity.JdbcEntityRepository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 
 import static ru.cft.focusstart.repository.reader.CategoryReader.readCategory;
 
+@Repository
 public class JdbcCategoryRepository extends JdbcEntityRepository implements CategoryRepository {
     private static final String ADD_QUERY =
             "INSERT INTO task5.category (title) " +
@@ -36,15 +39,8 @@ public class JdbcCategoryRepository extends JdbcEntityRepository implements Cate
                     " SET c.title = ?" +
                     " WHERE c.id = ?;";
 
-
-    private static final JdbcCategoryRepository INSTANCE = new JdbcCategoryRepository();
-
-    private JdbcCategoryRepository() {
-        super();
-    }
-
-    public static CategoryRepository getInstance() {
-        return INSTANCE;
+    public JdbcCategoryRepository(DataSource dataSource) {
+        super(dataSource);
     }
 
     @Override

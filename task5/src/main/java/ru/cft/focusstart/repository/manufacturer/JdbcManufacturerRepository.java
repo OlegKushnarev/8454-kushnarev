@@ -1,14 +1,17 @@
 package ru.cft.focusstart.repository.manufacturer;
 
+import org.springframework.stereotype.Repository;
 import ru.cft.focusstart.entity.Manufacturer;
 import ru.cft.focusstart.repository.DataAccessException;
 import ru.cft.focusstart.repository.entity.JdbcEntityRepository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 
 import static ru.cft.focusstart.repository.reader.ManufacturerReader.readManufacturer;
 
+@Repository
 public class JdbcManufacturerRepository extends JdbcEntityRepository implements ManufacturerRepository {
     private static final String ADD_QUERY =
             "INSERT INTO task5.manufacturer (title)" +
@@ -36,14 +39,8 @@ public class JdbcManufacturerRepository extends JdbcEntityRepository implements 
                     " SET m.title = ?" +
                     " WHERE m.id = ?;";
 
-    private static final JdbcManufacturerRepository INSTANCE = new JdbcManufacturerRepository();
-
-    private JdbcManufacturerRepository() {
-        super();
-    }
-
-    public static ManufacturerRepository getInstance() {
-        return INSTANCE;
+    public JdbcManufacturerRepository(DataSource dataSource) {
+        super(dataSource);
     }
 
     @Override

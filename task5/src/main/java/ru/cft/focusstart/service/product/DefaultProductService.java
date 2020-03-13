@@ -1,5 +1,6 @@
 package ru.cft.focusstart.service.product;
 
+import org.springframework.stereotype.Service;
 import ru.cft.focusstart.api.dto.ProductDto;
 import ru.cft.focusstart.entity.Category;
 import ru.cft.focusstart.entity.Manufacturer;
@@ -8,10 +9,7 @@ import ru.cft.focusstart.exception.InvalidParametersException;
 import ru.cft.focusstart.exception.ObjectNotFoundException;
 import ru.cft.focusstart.mapper.ProductMapper;
 import ru.cft.focusstart.repository.category.CategoryRepository;
-import ru.cft.focusstart.repository.category.JdbcCategoryRepository;
-import ru.cft.focusstart.repository.manufacturer.JdbcManufacturerRepository;
 import ru.cft.focusstart.repository.manufacturer.ManufacturerRepository;
-import ru.cft.focusstart.repository.product.JdbcProductRepository;
 import ru.cft.focusstart.repository.product.ProductRepository;
 
 import java.util.List;
@@ -19,22 +17,27 @@ import java.util.stream.Collectors;
 
 import static ru.cft.focusstart.service.validation.Validator.*;
 
+@Service
 public class DefaultProductService implements ProductService {
-    private static final DefaultProductService INSTANCE = new DefaultProductService();
 
-    private final CategoryRepository categoryRepository = JdbcCategoryRepository.getInstance();
+    private final CategoryRepository categoryRepository;
 
-    private final ManufacturerRepository manufacturerRepository = JdbcManufacturerRepository.getInstance();
+    private final ManufacturerRepository manufacturerRepository;
 
-    private final ProductRepository productRepository = JdbcProductRepository.getInstance();
+    private final ProductRepository productRepository;
 
-    private final ProductMapper productMapper = ProductMapper.getInstance();
+    private final ProductMapper productMapper;
 
-    private DefaultProductService() {
-    }
-
-    public static ProductService getInstance() {
-        return INSTANCE;
+    private DefaultProductService(
+            CategoryRepository categoryRepository,
+            ManufacturerRepository manufacturerRepository,
+            ProductRepository productRepository,
+            ProductMapper productMapper
+    ) {
+        this.categoryRepository = categoryRepository;
+        this.manufacturerRepository = manufacturerRepository;
+        this.productRepository = productRepository;
+        this.productMapper = productMapper;
     }
 
     @Override

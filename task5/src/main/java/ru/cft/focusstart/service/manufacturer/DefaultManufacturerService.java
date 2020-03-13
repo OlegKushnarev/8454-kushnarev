@@ -1,10 +1,10 @@
 package ru.cft.focusstart.service.manufacturer;
 
+import org.springframework.stereotype.Service;
 import ru.cft.focusstart.api.dto.ManufacturerDto;
 import ru.cft.focusstart.entity.Manufacturer;
 import ru.cft.focusstart.exception.ObjectNotFoundException;
 import ru.cft.focusstart.mapper.ManufacturerMapper;
-import ru.cft.focusstart.repository.manufacturer.JdbcManufacturerRepository;
 import ru.cft.focusstart.repository.manufacturer.ManufacturerRepository;
 
 import java.util.List;
@@ -12,18 +12,19 @@ import java.util.stream.Collectors;
 
 import static ru.cft.focusstart.service.validation.Validator.*;
 
+@Service
 public class DefaultManufacturerService implements ManufacturerService {
-    private static final DefaultManufacturerService INSTANCE = new DefaultManufacturerService();
 
-    private final ManufacturerRepository manufacturerRepository = JdbcManufacturerRepository.getInstance();
+    private final ManufacturerRepository manufacturerRepository;
 
-    private final ManufacturerMapper manufacturerMapper = ManufacturerMapper.getInstance();
+    private final ManufacturerMapper manufacturerMapper;
 
-    private DefaultManufacturerService() {
-    }
-
-    public static ManufacturerService getInstance() {
-        return INSTANCE;
+    private DefaultManufacturerService(
+            ManufacturerRepository manufacturerRepository,
+            ManufacturerMapper manufacturerMapper
+    ) {
+        this.manufacturerRepository = manufacturerRepository;
+        this.manufacturerMapper = manufacturerMapper;
     }
 
     @Override

@@ -1,13 +1,13 @@
 package ru.cft.focusstart.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.context.ApplicationContext;
 import ru.cft.focusstart.service.category.CategoryService;
-import ru.cft.focusstart.service.category.DefaultCategoryService;
-import ru.cft.focusstart.service.manufacturer.DefaultManufacturerService;
 import ru.cft.focusstart.service.manufacturer.ManufacturerService;
-import ru.cft.focusstart.service.product.DefaultProductService;
 import ru.cft.focusstart.service.product.ProductService;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,13 +16,27 @@ import java.io.IOException;
 public abstract class EntityServlet extends HttpServlet {
     protected final ObjectMapper mapper = new ObjectMapper();
 
-    protected final ManufacturerService manufacturerService = DefaultManufacturerService.getInstance();
+    protected ManufacturerService manufacturerService;
 
-    protected final ProductService productService = DefaultProductService.getInstance();
+    protected ProductService productService;
 
-    protected final CategoryService categoryService = DefaultCategoryService.getInstance();
+    protected CategoryService categoryService;
 
-    protected final ExceptionHandler exceptionHandler = ExceptionHandler.getInstance();
+    protected ExceptionHandler exceptionHandler;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        ApplicationContext applicationContext =
+                (ApplicationContext) config.getServletContext().getAttribute("applicationContext");
+
+        this.manufacturerService = applicationContext.getBean(ManufacturerService.class);
+        this.productService = applicationContext.getBean(ProductService.class);
+        this.categoryService = applicationContext.getBean(CategoryService.class);
+        this.exceptionHandler = applicationContext.getBean(ExceptionHandler.class);
+    }
+
 
     protected String getPath(HttpServletRequest req) {
         return req.getRequestURI().substring(req.getContextPath().length());

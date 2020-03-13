@@ -1,17 +1,11 @@
 package ru.cft.focusstart.mapper;
 
+import org.springframework.stereotype.Component;
 import ru.cft.focusstart.api.dto.CategoryDto;
 import ru.cft.focusstart.entity.Category;
 
+@Component
 public class CategoryMapper {
-    private static final CategoryMapper INSTANCE = new CategoryMapper();
-
-    private CategoryMapper() {
-    }
-
-    public static CategoryMapper getInstance() {
-        return INSTANCE;
-    }
 
     public CategoryDto toDto(Category category) {
         return CategoryDto.builder()

@@ -1,11 +1,13 @@
 package ru.cft.focusstart.repository.product;
 
+import org.springframework.stereotype.Repository;
 import ru.cft.focusstart.entity.Category;
 import ru.cft.focusstart.entity.Manufacturer;
 import ru.cft.focusstart.entity.Product;
 import ru.cft.focusstart.repository.DataAccessException;
 import ru.cft.focusstart.repository.entity.JdbcEntityRepository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,6 +18,7 @@ import static ru.cft.focusstart.repository.reader.CategoryReader.readCategory;
 import static ru.cft.focusstart.repository.reader.ManufacturerReader.readManufacturer;
 import static ru.cft.focusstart.repository.reader.ProductReader.readProduct;
 
+@Repository
 public class JdbcProductRepository extends JdbcEntityRepository implements ProductRepository {
     private static final String ADD_QUERY =
             "INSERT INTO task5.product (title, categoryId, vendorCode, manufacturerId, description) " +
@@ -51,14 +54,8 @@ public class JdbcProductRepository extends JdbcEntityRepository implements Produ
     private static final String DELETE_QUERY =
             "DELETE FROM task5.product WHERE id = ?;";
 
-    private static final JdbcProductRepository INSTANCE = new JdbcProductRepository();
-
-    private JdbcProductRepository() {
-        super();
-    }
-
-    public static JdbcProductRepository getInstance() {
-        return INSTANCE;
+    public JdbcProductRepository(DataSource dataSource) {
+        super(dataSource);
     }
 
     @Override

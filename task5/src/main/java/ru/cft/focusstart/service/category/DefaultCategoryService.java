@@ -1,29 +1,30 @@
 package ru.cft.focusstart.service.category;
 
+import org.springframework.stereotype.Service;
 import ru.cft.focusstart.api.dto.CategoryDto;
 import ru.cft.focusstart.entity.Category;
 import ru.cft.focusstart.exception.ObjectNotFoundException;
 import ru.cft.focusstart.mapper.CategoryMapper;
 import ru.cft.focusstart.repository.category.CategoryRepository;
-import ru.cft.focusstart.repository.category.JdbcCategoryRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.cft.focusstart.service.validation.Validator.*;
 
+@Service
 public class DefaultCategoryService implements CategoryService {
-    private static final DefaultCategoryService INSTANCE = new DefaultCategoryService();
 
-    private final CategoryRepository categoryRepository = JdbcCategoryRepository.getInstance();
+    private final CategoryRepository categoryRepository;
 
-    private final CategoryMapper categoryMapper = CategoryMapper.getInstance();
+    private final CategoryMapper categoryMapper;
 
-    private DefaultCategoryService() {
-    }
-
-    public static CategoryService getInstance() {
-        return INSTANCE;
+    private DefaultCategoryService(
+            CategoryRepository categoryRepository,
+            CategoryMapper categoryMapper
+    ) {
+        this.categoryRepository = categoryRepository;
+        this.categoryMapper = categoryMapper;
     }
 
     @Override
