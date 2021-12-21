@@ -1,4 +1,4 @@
-SELECT * FROM task5.manufecturer;
+SELECT * FROM task5.manufacturer;
 
 --GET/manufacturers
 SELECT * FROM task5.manufacturer AS m WHERE LOWER(m.title) LIKE LOWER('%APC%');
@@ -10,7 +10,7 @@ SELECT * FROM task5.manufacturer WHERE id = 4;
 SELECT * FROM task5.product WHERE manufacturerId = 3;
 
 --GET/manufacturers/{id}/categories
-SELECT DISTINCT task5.category.id, task5.category.name
+SELECT DISTINCT task5.category.id, task5.category.title
 	FROM task5.category
 		INNER JOIN task5.product ON task5.category.id = task5.product.categoryId
 		INNER JOIN task5.manufacturer ON task5.manufacturer.id = task5.product.manufacturerId
